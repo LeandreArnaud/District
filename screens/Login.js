@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet, View, TextInput, Text, Button, Dimensions, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, TextInput, Text, ActivityIndicator, Dimensions, TouchableOpacity} from 'react-native'
 import config from "../config.json"
 import * as firebase from 'firebase';
+import {isEmailValid, isPasswordValid} from '../utile/VerifyInputsFormat'
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //init firebase
@@ -30,7 +31,8 @@ class Login extends React.Component{
         password: '',
         is_email_valid: true,
         is_password_valid: true,
-        uid: false
+        uid: false,
+        wait_connection: false
     }
   }
 
@@ -48,44 +50,34 @@ class Login extends React.Component{
   // Login with email and passsword
   logInUser = (email, password) => {
     try{
-        console.log('login up'+email+password)
-        this.verifyEmail()
-        this.verifyPassword()
-        firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((user) => {this.setState({uid: user.user.uid})})
-        .then(() => this._moveToMapGuesser())
+        if (this.state.uid){
+            this._moveToMapGuesser()
+        }
+        else{
+            this.setState({wait_connection: true})
+            console.log('login up'+email+password)
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((user) => {this.setState({uid: user.user.uid})})
+            .then(() => this.setState({wait_connection: false}))
+            .then(() => this._moveToMapGuesser())
+        }
     }
     catch (error){
         console.log(error.toString())
+        this.setState({wait_connection: false})
     }
   }
 
   // check if email is valid format xxx@xxx.xx
-  verifyEmail(){
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const email = this.state.email;
-      if (!re.test(String(email))){
-        this.setState({is_email_valid: false})
-        return(true)
-      }
-      else{
-        this.setState({is_email_valid: true})
-        return(false)
-      }
+  verifyEmail(value){
+      this.setState({is_email_valid: !isEmailValid(value)})
   }
 
   // check if password is long enought
-  verifyPassword(){
-    const password = this.state.password;
-    if (password.length < 6){
-      this.setState({is_password_valid: false})
-      return(true)
-    }
-    else{
-      this.setState({is_password_valid: true})
-      return(false)
-    }
-}
+  verifyPassword(value){
+    this.setState({is_password_valid: isPasswordValid(value)})
+  }
+
 
   render(){
     return(
@@ -97,12 +89,13 @@ class Login extends React.Component{
             </Text>
             <TextInput
                 style={styles.inputText}
-                onChangeText={(value) => this.setState({email: value})}
-                onEndEditing={() => this.verifyEmail()}
+                onChangeText={(value) => {this.setState({email: value})
+                                          this.verifyEmail(value)}}
+                //onEndEditing={() => this.verifyEmail()}
                 placeholder="exemple@exemple.com"
                 //autoCompleteType="email"
                 keyboardType="email-address"
-                autoFocus={true}
+                //autoFocus={true}
             />
             {this.state.is_email_valid? null:
                 <Text
@@ -118,8 +111,9 @@ class Login extends React.Component{
             </Text>
             <TextInput
                 style={styles.inputText}
-                onChangeText={(value) => this.setState({password: value})}
-                onEndEditing={() => this.verifyPassword()}
+                onChangeText={(value) => {this.setState({password: value})
+                                          this.verifyPassword(value)}}
+                //onEndEditing={() => this.verifyPassword()}
                 placeholder="password"
                 //autoCompleteType="password"
                 secureTextEntry={true}
@@ -127,14 +121,18 @@ class Login extends React.Component{
             {this.state.is_password_valid? null:
                 <Text
                 style={styles.invalidText}>
-                    password must be at least 8 characters
+                    password must be at least 6 characters
                 </Text>}
         </View>
 
         
         <TouchableOpacity
         onPress={() => this.logInUser(this.state.email, this.state.password)}
-        style={styles.logInButton}>
+        style={(this.state.is_password_valid & this.state.is_email_valid & 
+            this.state.email != '' & this.state.password != '')?
+            styles.logInButtonOn:styles.logInButtonOff}
+        disabled={!(this.state.is_password_valid & this.state.is_email_valid & 
+            this.state.email != '' & this.state.password != '')}>
             <Text
             style={styles.logInText}>
                 Login
@@ -142,9 +140,16 @@ class Login extends React.Component{
         </TouchableOpacity>
             
         
+        {this.state.wait_connection?
+            <ActivityIndicator
+            style={styles.ActivityIndicator}
+            color='#000000'
+            size='large'>
+            </ActivityIndicator>
+        : null}
 
         {this.state.uid?
-            <Text>Connected !</Text>
+            <Text style={styles.ActivityIndicator}>Connected !</Text>
         : null}
 
         <TouchableOpacity
@@ -181,8 +186,15 @@ const styles = StyleSheet.create({
     invalidText:{
         color: 'red'
     },
-    logInButton:{
+    logInButtonOn:{
         backgroundColor:'green',
+        width: Dimensions.get('window').width*0.4,
+        padding: 10,
+        borderRadius: 30,
+        marginTop: 20
+    },
+    logInButtonOff:{
+        backgroundColor:'#dddddd',
         width: Dimensions.get('window').width*0.4,
         padding: 10,
         borderRadius: 30,
@@ -192,6 +204,9 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 15
+    },
+    ActivityIndicator:{
+        marginTop: 20
     },
     SignUpButton:{
         marginTop: 50

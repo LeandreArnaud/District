@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet, View, TextInput, Text, Button, Dimensions, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, TextInput, Text, ActivityIndicator, Dimensions, TouchableOpacity} from 'react-native'
 import config from "../config.json"
 import * as firebase from 'firebase';
+import {isEmailValid, isPasswordValid} from '../utile/VerifyInputsFormat'
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //init firebase
@@ -30,7 +31,8 @@ class SignUp extends React.Component{
         password: '',
         is_email_valid: true,
         is_password_valid: true,
-        uid: false
+        uid: false,
+        wait_connection: false
     }
   }
 
@@ -43,11 +45,11 @@ class SignUp extends React.Component{
   // Sign up with this email and password
   signUpUser = (email, password) => {
     try{
+        this.setState({wait_connection: true})
         console.log('signing up '+email+password)
-        this.verifyEmail()
-        this.verifyPassword()
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {this.setState({uid: userCredential.user.uid})})
+        .then(() => this.setState({wait_connection: false}))
         .then(() => this._moveToLogIn())
     }
     catch (error){
@@ -57,31 +59,14 @@ class SignUp extends React.Component{
 
 
   // check if email is valid format xxx@xxx.xx
-  verifyEmail(){
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const email = this.state.email;
-      if (!re.test(String(email))){
-        this.setState({is_email_valid: false})
-        return(true)
-      }
-      else{
-        this.setState({is_email_valid: true})
-        return(false)
-      }
+  verifyEmail(value){
+    this.setState({is_email_valid: !isEmailValid(value)})
   }
 
   // check if password is long enought
-  verifyPassword(){
-    const password = this.state.password;
-    if (password.length < 6){
-      this.setState({is_password_valid: false})
-      return(true)
-    }
-    else{
-      this.setState({is_password_valid: true})
-      return(false)
-    }
-}
+  verifyPassword(value){
+  this.setState({is_password_valid: isPasswordValid(value)})
+  }
 
   render(){
     return(
@@ -93,8 +78,9 @@ class SignUp extends React.Component{
             </Text>
             <TextInput
                 style={styles.inputText}
-                onChangeText={(value) => this.setState({email: value})}
-                onEndEditing={() => this.verifyEmail()}
+                onChangeText={(value) => {this.setState({email: value})
+                                          this.verifyEmail(value)}}
+                //onEndEditing={() => this.verifyEmail()}
                 placeholder="exemple@exemple.com"
                 //autoCompleteType="email"
                 keyboardType="email-address"
@@ -114,8 +100,9 @@ class SignUp extends React.Component{
             </Text>
             <TextInput
                 style={styles.inputText}
-                onChangeText={(value) => this.setState({password: value})}
-                onEndEditing={() => this.verifyPassword()}
+                onChangeText={(value) => {this.setState({password: value})
+                                          this.verifyPassword(value)}}
+                //onEndEditing={() => this.verifyPassword()}
                 placeholder="password"
                 //autoCompleteType="password"
                 secureTextEntry={true}
@@ -123,18 +110,30 @@ class SignUp extends React.Component{
             {this.state.is_password_valid? null:
                 <Text
                 style={styles.invalidText}>
-                    password must be at least 8 characters
+                    password must be at least 6 characters
                 </Text>}
         </View>
 
         <TouchableOpacity
         onPress={() => this.signUpUser(this.state.email, this.state.password)}
-        style={styles.signUpButton}>
+        style={(this.state.is_password_valid & this.state.is_email_valid & 
+            this.state.user != '' & this.state.password != '')?
+            styles.signUpButtonOn:styles.signUpButtonOff}
+        disabled={!(this.state.is_password_valid & this.state.is_email_valid & 
+            this.state.email != '' & this.state.password != '')}>
             <Text
             style={styles.signUpText}>
                 SignUp
             </Text>
         </TouchableOpacity>
+
+        {this.state.wait_connection?
+            <ActivityIndicator
+            style={styles.ActivityIndicator}
+            color='#000000'
+            size='large'>
+            </ActivityIndicator>
+        : null}
         
       </View>
     );
@@ -162,8 +161,15 @@ const styles = StyleSheet.create({
     invalidText:{
         color: 'red'
     },
-    signUpButton:{
+    signUpButtonOn:{
         backgroundColor:'blue',
+        width: Dimensions.get('window').width*0.4,
+        padding: 10,
+        borderRadius: 30,
+        marginTop: 20
+    },
+    signUpButtonOff:{
+        backgroundColor:'#dddddd',
         width: Dimensions.get('window').width*0.4,
         padding: 10,
         borderRadius: 30,
@@ -173,6 +179,9 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 15
+    },
+    ActivityIndicator:{
+        marginTop: 20
     },
 });
 
