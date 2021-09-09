@@ -82,11 +82,11 @@ class MapGuesser extends React.Component{
                 pointerEvents="box-none"
                 style={styles.sendButton}>
                 <TouchableOpacity 
-                style={styles.TO}
-                onPress={() => this._getScore()}>
-                <Text style={styles.sendButtonText}>
-                    SEND
-                </Text>
+                    style={styles.sendButtonContainer}
+                    onPress={() => this._getScore()}>
+                    <Text style={styles.sendButtonText}>
+                        SEND
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -143,16 +143,17 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         backgroundColor: 'transparent',
         marginBottom: 30,
-        marginRight: 20,        
+        marginRight: 20,   
+    },
+    sendButtonContainer:{
+        backgroundColor:'green',
+        borderRadius: 40,
+        padding: 15
     },
     sendButtonText: {
-        backgroundColor: 'green',
-        padding: 10,
-        borderRadius: 10,
+        color: 'white',
+        fontWeight: 'bold',
     },
-    TO:{
-        backgroundColor:'green'
-    }
 });
 
 export default MapGuesser
