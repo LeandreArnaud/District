@@ -1,26 +1,13 @@
 import React from 'react'
 import {StyleSheet, View, TextInput, Text, ActivityIndicator, Dimensions, TouchableOpacity} from 'react-native'
-import config from "../config.json"
-import * as firebase from 'firebase';
 import {isEmailValid, isPasswordValid} from '../utile/VerifyInputsFormat'
-//import { TouchableOpacity } from 'react-native-gesture-handler';
+import {get_token} from '../API/mvp-district-API.js'
 
-//init firebase
-const firebaseConfig = {
-    apiKey: config.firebaseConfig.apiKey,
-    authDomain: config.firebaseConfig.authDomain,
-    projectId: config.firebaseConfig.projectId,
-    storageBucket: config.firebaseConfig.storageBucket,
-    messagingSenderId: config.firebaseConfig.messagingSenderId,
-    appId: config.firebaseConfig.appId
 
-}
-try{
-    firebase.initializeApp(firebaseConfig);
-}
-catch (error){
-    console.log(error.toString())
-}
+
+
+
+
 
 // screen where to login
 class Login extends React.Component{
@@ -34,12 +21,13 @@ class Login extends React.Component{
         uid: false,
         wait_connection: false
     }
+    this.token = null,
+    this.refresh_token = null
   }
+  
 
   _moveToMapGuesser = () => {
-    if (this.state.uid){
-        this.props.navigation.navigate('MapGuesser')
-    }
+    this.props.navigation.navigate('MapGuesser')
   }
 
   _moveToSignUp = () => {
@@ -47,19 +35,39 @@ class Login extends React.Component{
   }
 
 
+  _get_token(email, password){
+    get_token(email, password)
+    .then((response) => {
+      console.log(response.status)
+      if (response.status !== 200){
+          // prompt status
+          console.log('error not 200 status')
+          this.setState({wait_connection: false})
+      }
+      else{
+        response.json().then((data) => {
+            // save token and go to mapguesser
+            this.token = data.token
+            this.refresh_token = data.refreshToken
+            this.setState({wait_connection: false})
+            this._moveToMapGuesser()
+        })
+      }
+    })
+  }
+
   // Login with email and passsword
   logInUser = (email, password) => {
     try{
+        // TODO: check token and move to map guesser if valid
         if (this.state.uid){
             this._moveToMapGuesser()
         }
         else{
             this.setState({wait_connection: true})
             console.log('login up'+email+password)
-            firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((user) => {this.setState({uid: user.user.uid})})
-            .then(() => this.setState({wait_connection: false}))
-            .then(() => this._moveToMapGuesser())
+            // call api to get token
+            this._get_token(email, password)
         }
     }
     catch (error){
