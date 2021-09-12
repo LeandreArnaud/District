@@ -19,18 +19,51 @@ export function get_token (email, passsword) {
 }
 
 
+export function signUp (email, passsword) {
+  const url = URL+'signup'
 
-export function get_random_adress () {
-  const url = URL+'get_random_adress/'
-  return fetch(url)
+  // Build formData object.
+  let formData = new FormData();
+  formData.append('email', email);
+  formData.append('password', passsword);
+
+  return fetch(url, {
+    method: 'post',
+    body: formData
+  })
+}
+
+
+
+export function get_random_adress (token) {
+  const url = URL+'get_random_adress'
+
+  let headerData = new Headers()
+  headerData.append('authorization', token)
+
+  return fetch(url, {
+    method:'get',
+    headers: headerData
+  })
     .then((response) => response.json())
     .catch((error) => console.error(error))
 }
 
 
-export function get_evaluation (id, lat, lon) {
-    const url = URL+'get_evaluation/'+id+'/'+lat+'/'+lon
-    return fetch(url)
+
+export function get_evaluation (token, id, lat, lon) {
+    const url = URL+'get_evaluation'
+
+    let headerData = new Headers()
+    headerData.append('authorization', token)
+    headerData.append('ID', id)
+    headerData.append('lat', lat)
+    headerData.append('lon', lon)
+
+    return fetch(url, {
+      method:'get',
+      headers: headerData
+    })
       .then((response) => response.json())
       .catch((error) => console.error(error))
   }

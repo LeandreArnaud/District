@@ -1,26 +1,10 @@
 import React from 'react'
 import {StyleSheet, View, TextInput, Text, ActivityIndicator, Dimensions, TouchableOpacity} from 'react-native'
-import config from "../config.json"
-import * as firebase from 'firebase';
 import {isEmailValid, isPasswordValid} from '../utile/VerifyInputsFormat'
-//import { TouchableOpacity } from 'react-native-gesture-handler';
+import {signUp} from '../API/mvp-district-API.js'
+import { connect } from 'react-redux'
 
-//init firebase
-const firebaseConfig = {
-    apiKey: config.firebaseConfig.apiKey,
-    authDomain: config.firebaseConfig.authDomain,
-    projectId: config.firebaseConfig.projectId,
-    storageBucket: config.firebaseConfig.storageBucket,
-    messagingSenderId: config.firebaseConfig.messagingSenderId,
-    appId: config.firebaseConfig.appId
 
-}
-try{
-    firebase.initializeApp(firebaseConfig);
-}
-catch (error){
-    console.log(error.toString())
-}
 
 // screen where to login
 class SignUp extends React.Component{
@@ -31,15 +15,38 @@ class SignUp extends React.Component{
         password: '',
         is_email_valid: true,
         is_password_valid: true,
-        uid: false,
         wait_connection: false
     }
   }
 
   _moveToLogIn = () => {
-    if (this.state.uid){
-        this.props.navigation.navigate('Login')
-    }
+    this.props.navigation.navigate('Login')
+  }
+
+  _moveToMapGuesser = () => {
+    this.props.navigation.navigate('MapGuesser')
+  }
+
+  _get_token(email, password){
+    signUp(email, password)
+    .then((response) => {
+      console.log(response.status)
+      if (response.status !== 200){
+          // prompt status
+          console.log('error not 200 status')
+          this.setState({wait_connection: false})
+      }
+      else{
+        response.json().then((data) => {
+            // save token and go to mapguesser
+            const action = {type: 'REFRESH_TOKEN', value: data.token}
+            this.props.dispatch(action)
+            this.setState({wait_connection: false})
+            this._moveToMapGuesser()
+            
+        })
+      }
+    })
   }
 
   // Sign up with this email and password
@@ -47,13 +54,12 @@ class SignUp extends React.Component{
     try{
         this.setState({wait_connection: true})
         console.log('signing up '+email+password)
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {this.setState({uid: userCredential.user.uid})})
-        .then(() => this.setState({wait_connection: false}))
-        .then(() => this._moveToLogIn())
+        // add api login
+        this._get_token(email, password)
     }
     catch (error){
         console.log(error.toString())
+        this.setState({wait_connection: false})
     }
   }
 
@@ -185,4 +191,9 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUp
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    }
+}
+export default connect(mapStateToProps)(SignUp)

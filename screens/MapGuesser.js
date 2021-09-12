@@ -1,8 +1,10 @@
 import React from 'react'
 import MapView from 'react-native-maps';
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal} from 'react-native'
 import {get_random_adress, get_evaluation} from '../API/mvp-district-API.js'
 import mapStyle from '../GMStyles/BlindMapStyle.js'
+import { connect } from 'react-redux'
+
 
 
 
