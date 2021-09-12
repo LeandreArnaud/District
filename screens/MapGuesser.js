@@ -32,14 +32,16 @@ class MapGuesser extends React.Component{
     }
   }
 
+  
+
 
     componentDidMount(){
-        get_random_adress().then(data => this.setState({adresse : {
+        get_random_adress(this.props.token).then(data => this.setState({adresse : {
             id: data.id,
             num: data.num,
             rue: data.rue,
             cp: data.cp,
-            com: data.com}})); 
+            com: data.com}}));
     }
 
     _onRegionChangeComplete(region){
@@ -47,7 +49,8 @@ class MapGuesser extends React.Component{
     }
     
     _getScore(){
-        get_evaluation(this.state.adresse.id, 
+        get_evaluation(this.props.token, 
+            this.state.adresse.id, 
             this.state.region.latitude, 
             this.state.region.longitude).then(data => this.setState({
                 score: data.score,
@@ -156,4 +159,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MapGuesser
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    }
+}
+export default connect(mapStateToProps)(MapGuesser)

@@ -2,6 +2,7 @@ import React from 'react'
 import {StyleSheet, View, TextInput, Text, ActivityIndicator, Dimensions, TouchableOpacity} from 'react-native'
 import {isEmailValid, isPasswordValid} from '../utile/VerifyInputsFormat'
 import {get_token} from '../API/mvp-district-API.js'
+import { connect } from 'react-redux'
 
 
 
@@ -18,11 +19,8 @@ class Login extends React.Component{
         password: '',
         is_email_valid: true,
         is_password_valid: true,
-        uid: false,
         wait_connection: false
     }
-    this.token = null,
-    this.refresh_token = null
   }
   
 
@@ -47,10 +45,11 @@ class Login extends React.Component{
       else{
         response.json().then((data) => {
             // save token and go to mapguesser
-            this.token = data.token
-            this.refresh_token = data.refreshToken
+            const action = {type: 'REFRESH_TOKEN', value: data.token}
+            this.props.dispatch(action)
             this.setState({wait_connection: false})
             this._moveToMapGuesser()
+            
         })
       }
     })
@@ -60,12 +59,12 @@ class Login extends React.Component{
   logInUser = (email, password) => {
     try{
         // TODO: check token and move to map guesser if valid
-        if (this.state.uid){
+        if (this.props.token){
             this._moveToMapGuesser()
         }
         else{
             this.setState({wait_connection: true})
-            console.log('login up'+email+password)
+            console.log('login up'+email+'...')
             // call api to get token
             this._get_token(email, password)
         }
@@ -85,7 +84,6 @@ class Login extends React.Component{
   verifyPassword(value){
     this.setState({is_password_valid: isPasswordValid(value)})
   }
-
 
   render(){
     return(
@@ -156,7 +154,7 @@ class Login extends React.Component{
             </ActivityIndicator>
         : null}
 
-        {this.state.uid?
+        {this.props.token?
             <Text style={styles.ActivityIndicator}>Connected !</Text>
         : null}
 
@@ -227,4 +225,9 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Login
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    }
+}
+export default connect(mapStateToProps)(Login)
