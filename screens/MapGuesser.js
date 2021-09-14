@@ -30,9 +30,12 @@ class MapGuesser extends React.Component{
         },
         // beginning score
         distance: 'infinite',
-        score: 0
+        score: 0,
+        // components
+        ticket_visible: true
     }
   }
+   n = 20
 
   
 
@@ -60,18 +63,63 @@ class MapGuesser extends React.Component{
             }))
     }
 
+    _toggleTicketVisibility(){
+        this.setState({ticket_visible: !this.state.ticket_visible})
+    }
+
 
   // TODO: add PROVIDER_GOOGLE for GM on iOS
   render(){
     return(
       <View style={styles.container}>
-        <View style={styles.textContainer}>
-            <Text style={styles.ticketText}>
-                lat: {this.state.region.latitude}; lon: {this.state.region.longitude}{"\n"}
-                {this.state.adresse.num} {this.state.adresse.rue} {this.state.adresse.cp} {this.state.adresse.com}{"\n"}
-                score: {this.state.score} distance: {this.state.distance} 
-            </Text>
-        </View>
+        
+    
+        <Modal
+        transparent={true}
+        animationType='fade'
+        visible={this.state.ticket_visible}>
+            <View 
+            style={styles.centeredView}>
+                <View 
+                style={styles.ticketContainer}>
+                    <View 
+                    style={styles.ticket}>
+                        <View 
+                            pointerEvents="box-none"
+                            style={styles.ticketButton}>
+                            <TouchableOpacity 
+                                style={styles.ticketButtonContainer}
+                                onPress={() => this._toggleTicketVisibility()}>
+                                <Text style={styles.ticketButtonText}>
+                                    CLOSE
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View
+                        style={styles.ticketHole}>
+                            {[...Array(this.n)].map((e, i) => <View style={styles.circle}></View>)}
+                        </View>
+
+                        <View
+                        style={styles.ticketTextZone}>
+                            <Text style={styles.ticketText}>
+                                INTERVENTION N°1234{"\n"}{"\n"}{"\n"}
+                                ADRESSE: {this.state.adresse.num} {this.state.adresse.rue} {"\n"}
+                                COMMUNE: {this.state.adresse.cp} {this.state.adresse.com}{"\n"}
+                            </Text>
+                        </View>
+                        
+                        <View
+                        style={styles.ticketHole}>
+                            {[...Array(this.n)].map((e, i) => <View style={styles.circle}></View>)}
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+        
+
         <View style={styles.mapContainer}>
             <MapView 
                 style={styles.map} 
@@ -82,6 +130,17 @@ class MapGuesser extends React.Component{
             </MapView>
             <View pointerEvents="none" style={styles.staticMarkerContainer}>
                 <Text style={styles.textPointeur}>🚒</Text>
+            </View>
+            <View 
+                pointerEvents="box-none"
+                style={styles.ticketButton}>
+                <TouchableOpacity 
+                    style={styles.ticketButtonContainer}
+                    onPress={() => this._toggleTicketVisibility()}>
+                    <Text style={styles.ticketButtonText}>
+                        TICKET
+                    </Text>
+                </TouchableOpacity>
             </View>
             <View 
                 pointerEvents="box-none"
@@ -101,9 +160,49 @@ class MapGuesser extends React.Component{
 }
 
 const styles = StyleSheet.create({
+    centeredView:{
+        flex: 1,
+        alignItems:'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)'
+    },
+    ticketContainer:{
+        width: Dimensions.get('window').width*0.9,
+        height: Dimensions.get('window').height*0.5,
+    },
+    ticket:{
+        flex:1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FEF9E7',
+        overflow: 'hidden'
+    },
+    ticketTextZone: {
+        //backgroundColor:'red'
+    },
+    ticketText: {
+        textAlign:'center',
+        color: 'black',
+        fontFamily: 'monospace'
+    },
+    ticketHole:{
+        backgroundColor:'#FFFFFF',
+        paddingHorizontal: 10,
+        borderStyle: 'dashed',
+        borderWidth: 1,
+        borderRadius: 1
+    },
+    circle:{
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        backgroundColor: "black",
+        marginVertical: 10
+    },
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'flex-end',
         },
@@ -114,12 +213,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
     },
-    ticketText: {
-        textAlign:'center'
-    },
     mapContainer: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height*0.85,
+        height: Dimensions.get('window').height*0.95,
     },
     map: {
         width: '100%',
@@ -156,6 +252,26 @@ const styles = StyleSheet.create({
         padding: 15
     },
     sendButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    ticketButton: {
+        position: 'absolute',
+        top: 0, 
+        bottom: 0, 
+        left: 0, 
+        right: 0,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        backgroundColor: 'transparent',
+        marginTop: 10,   
+    },
+    ticketButtonContainer:{
+        backgroundColor:'red',
+        borderRadius: 40,
+        padding: 15
+    },
+    ticketButtonText: {
         color: 'white',
         fontWeight: 'bold',
     },
