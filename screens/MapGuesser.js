@@ -91,7 +91,7 @@ class MapGuesser extends React.Component{
                                 style={styles.ticketButtonContainer}
                                 onPress={() => this._toggleTicketVisibility()}>
                                 <Text style={styles.ticketButtonText}>
-                                    CLOSE
+                                    GOT IT !
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -106,7 +106,7 @@ class MapGuesser extends React.Component{
                             <Text style={styles.ticketText}>
                                 INTERVENTION N°1234{"\n"}{"\n"}{"\n"}
                                 ADRESSE: {this.state.adresse.num} {this.state.adresse.rue} {"\n"}
-                                COMMUNE: {this.state.adresse.cp} {this.state.adresse.com}{"\n"}
+                                COMMUNE: {this.state.adresse.cp} {this.state.adresse.com} {"\n"}
                             </Text>
                         </View>
                         
@@ -138,7 +138,7 @@ class MapGuesser extends React.Component{
                     style={styles.ticketButtonContainer}
                     onPress={() => this._toggleTicketVisibility()}>
                     <Text style={styles.ticketButtonText}>
-                        TICKET
+                        WATCH TICKET
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -179,7 +179,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     ticketTextZone: {
-        //backgroundColor:'red'
+        //backgroundColor:'red',
+        width: Dimensions.get('window').width*0.7,
     },
     ticketText: {
         textAlign:'center',
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
         marginTop: 10,   
     },
     ticketButtonContainer:{
-        backgroundColor:'red',
+        backgroundColor:'brown',
         borderRadius: 40,
         padding: 15
     },
