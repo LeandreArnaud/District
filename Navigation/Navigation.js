@@ -9,7 +9,8 @@ const GlobalStackNavigaor = createStackNavigator({
   Login:{
     screen:Login,
     navigationOptions: {
-      title:'Login'
+      title:'Login',
+      headerShown:false
     }
   },
   SignUp:{

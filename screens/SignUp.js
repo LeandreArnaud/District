@@ -86,11 +86,12 @@ class SignUp extends React.Component{
                 style={styles.inputText}
                 onChangeText={(value) => {this.setState({email: value})
                                           this.verifyEmail(value)}}
-                //onEndEditing={() => this.verifyEmail()}
                 placeholder="exemple@exemple.com"
-                //autoCompleteType="email"
+                autoCompleteType="email"
                 keyboardType="email-address"
                 autoFocus={true}
+                returnKeyType='next'
+                onSubmitEditing={() => { this.secondTextInput.focus(); }}
             />
             {this.state.is_email_valid? null:
                 <Text
@@ -108,10 +109,12 @@ class SignUp extends React.Component{
                 style={styles.inputText}
                 onChangeText={(value) => {this.setState({password: value})
                                           this.verifyPassword(value)}}
-                //onEndEditing={() => this.verifyPassword()}
                 placeholder="password"
-                //autoCompleteType="password"
+                autoCompleteType="password"
                 secureTextEntry={true}
+                returnKeyType='done'
+                ref={(input) => { this.secondTextInput = input; }}
+                onSubmitEditing={() => this.signUpUser(this.state.email, this.state.password)}
             />
             {this.state.is_password_valid? null:
                 <Text

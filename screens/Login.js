@@ -99,9 +99,11 @@ class Login extends React.Component{
                                           this.verifyEmail(value)}}
                 //onEndEditing={() => this.verifyEmail()}
                 placeholder="exemple@exemple.com"
-                //autoCompleteType="email"
+                autoCompleteType="email"
                 keyboardType="email-address"
-                //autoFocus={true}
+                autoFocus={true}
+                returnKeyType='next'
+                onSubmitEditing={() => { this.secondTextInput.focus(); }}
             />
             {this.state.is_email_valid? null:
                 <Text
@@ -121,8 +123,11 @@ class Login extends React.Component{
                                           this.verifyPassword(value)}}
                 //onEndEditing={() => this.verifyPassword()}
                 placeholder="password"
-                //autoCompleteType="password"
+                autoCompleteType="password"
                 secureTextEntry={true}
+                returnKeyType='done'
+                ref={(input) => { this.secondTextInput = input; }}
+                onSubmitEditing={() => this.logInUser(this.state.email, this.state.password)}
             />
             {this.state.is_password_valid? null:
                 <Text
