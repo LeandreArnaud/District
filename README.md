@@ -3,11 +3,7 @@
 A mobile app made to train firefighters to learn their district (streetnames, apartments, hydrants.. etc)
 <br/><br/>
 
-## Backend API (Alpha)
-For now, the 
-<span style="color:red">**backend API is private**</span> 
-because we need to implement an authentification functionality (I don't want you to ruin all my GCP credits). But you can create yours:<br/>
-The **MVP backend** (limited to one city) will be available on my github soon !!
+
 
 ## Built With
 - [React Native](https://reactnative.dev)
@@ -29,6 +25,15 @@ The **MVP backend** (limited to one city) will be available on my github soon !!
     ```sh
     npm start
     ```
+
+## Backend API (Alpha)
+For now, the 
+<span style="color:red">**backend API is private**</span>
+and is restricted to a single city. Also it doesn't use a database at this point.<br/>
+I need to improve secutity on it (I don't want you to ruin all my GCP credits). <br/>
+However, the code is available on 
+[this repo](https://github.com/LeandreArnaud/District_backend) 
+so you can deploy yours easily.<br/><br/>
 
 ## Contact
 🇫🇷 Léandre ARNAUD: 
