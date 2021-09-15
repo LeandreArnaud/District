@@ -1,9 +1,10 @@
 import React from 'react'
 import MapView from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal} from 'react-native'
-import {get_random_adress, get_evaluation} from '../API/mvp-district-API.js'
+import {get_random_adress} from '../API/mvp-district-API.js'
 import mapStyle from '../GMStyles/BlindMapStyle.js'
 import { connect } from 'react-redux'
+import MapGuesserResults from './MapGuesserResults.js';
 
 
 
@@ -28,19 +29,16 @@ class MapGuesser extends React.Component{
             cp: null,
             com: null,
         },
-        // beginning score
-        distance: 'infinite',
-        score: 0,
         // components
-        ticket_visible: true
+        ticket_visible: true,
+        result_visible: false
     }
   }
    n = 20
 
   
 
-
-    componentDidMount(){
+   _updateAdresse(){
         get_random_adress(this.props.token).then(data => this.setState({adresse : {
             id: data.id,
             num: data.num,
@@ -49,18 +47,20 @@ class MapGuesser extends React.Component{
             com: data.com}}));
     }
 
+    componentDidMount(){
+        this._updateAdresse()
+    }
+
     _onRegionChangeComplete(region){
         this.setState({ region:  region})
     }
     
-    _getScore(){
-        get_evaluation(this.props.token, 
-            this.state.adresse.id, 
-            this.state.region.latitude, 
-            this.state.region.longitude).then(data => this.setState({
-                score: data.score,
-                distance: data.distance
-            }))
+    _toggleScoreVisibility(){
+        this.setState({result_visible: !this.state.result_visible})
+        if(this.state.result_visible){
+            this._updateAdresse()
+            this._toggleTicketVisibility()
+        }
     }
 
     _toggleTicketVisibility(){
@@ -73,6 +73,18 @@ class MapGuesser extends React.Component{
     return(
       <View style={styles.container}>
         
+        <MapGuesserResults
+            id={this.state.adresse.id}
+            num={this.state.adresse.num}
+            rue={this.state.adresse.rue}
+            cp={this.state.adresse.cp}
+            com={this.state.adresse.com}
+            latGuessed={this.state.region.latitude}
+            lonGuessed={this.state.region.longitude}
+            token={this.props.token}
+            closeModalFunction={() => this._toggleScoreVisibility()}
+            visible={this.state.result_visible}>
+        </MapGuesserResults>
     
         <Modal
         transparent={true}
@@ -98,7 +110,7 @@ class MapGuesser extends React.Component{
 
                         <View
                         style={styles.ticketHole}>
-                            {[...Array(this.n)].map((e, i) => <View style={styles.circle}></View>)}
+                            {[...Array(this.n)].map((e, i) => <View style={styles.circle} key={i}></View>)}
                         </View>
 
                         <View
@@ -112,7 +124,7 @@ class MapGuesser extends React.Component{
                         
                         <View
                         style={styles.ticketHole}>
-                            {[...Array(this.n)].map((e, i) => <View style={styles.circle}></View>)}
+                            {[...Array(this.n)].map((e, i) => <View style={styles.circle} key={i}></View>)}
                         </View>
                     </View>
                 </View>
@@ -147,7 +159,7 @@ class MapGuesser extends React.Component{
                 style={styles.sendButton}>
                 <TouchableOpacity 
                     style={styles.sendButtonContainer}
-                    onPress={() => this._getScore()}>
+                    onPress={() => this._toggleScoreVisibility()}>
                     <Text style={styles.sendButtonText}>
                         SEND
                     </Text>
