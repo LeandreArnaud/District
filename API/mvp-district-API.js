@@ -67,3 +67,12 @@ export function get_evaluation (token, id, lat, lon) {
       .then((response) => response.json())
       .catch((error) => console.error(error))
   }
+
+
+export function get_account_info (token) {
+  return
+}
+
+export function refresh_token (refresh_token) {
+  return
+}
