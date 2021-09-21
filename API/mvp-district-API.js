@@ -18,6 +18,19 @@ export function get_token (email, passsword) {
   })
 }
 
+export function refresh_token (refresh_token) {
+  const url = URL+'token'
+
+  // Build formData object.
+  let formData = new FormData();
+  formData.append('refreshToken', refresh_token);
+
+  return fetch(url, {
+    method: 'post',
+    body: formData
+  })
+}
+
 
 export function signUp (email, passsword) {
   const url = URL+'signup'
