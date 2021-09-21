@@ -83,9 +83,17 @@ export function get_evaluation (token, id, lat, lon) {
 
 
 export function get_account_info (token) {
-  return
+  const url = URL+'account_info'
+
+  let headerData = new Headers()
+  headerData.append('authorization', token)
+
+  return fetch(url, {
+    method:'get',
+    headers: headerData
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
 }
 
-export function refresh_token (refresh_token) {
-  return
-}
+
