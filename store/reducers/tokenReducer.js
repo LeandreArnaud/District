@@ -10,7 +10,7 @@ function tokenReducer(state = initialState, action){
                 token: action.value
             }
             return nextState
-        case 'REFRESH__REFRESHTOKEN':
+        case 'REFRESH_REFRESHTOKEN':
             nextState = {
                 ...state,
                 refreshToken: action.value
