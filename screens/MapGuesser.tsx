@@ -1,142 +1,120 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import MapView from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal} from 'react-native'
-import {get_random_adress} from '../API/mvp-district-API.js'
+import {getRandomAdress} from '../API/mvp-district-API'
 import mapStyle from '../GMStyles/BlindMapStyle.js'
-import { connect } from 'react-redux'
-import MapGuesserResults from './MapGuesserResults.js';
+import MapGuesserResults from './MapGuesserResults';
 
 
+interface adress {
+    id: string;
+    num: string;
+    rue: string;
+    cp: string;
+    com: string;
+};
+
+interface cursor {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+}
 
 
 // screen where you try to guess the location of an adress
-class MapGuesser extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {
-        region: {
-            // beginning location
-            latitude: 48.77687769018972,
-            longitude: 2.000842701780273,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-        // adress to guess
-        adresse: {
-            id: null,
-            num: null,
-            rue: null,
-            cp: null,
-            com: null,
-        },
-        // components
-        ticket_visible: true,
-        result_visible: false
-    }
-  }
-   n = 20
+export const MapGuesser: React.FC = ({}) => {
+    const [adressToGuess, setAdressToGuess]: [adress, Dispatch<SetStateAction<adress>>] = React.useState();
+    const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState();
+    const [ticketVisible, setTicketVisible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(true);
+    const [resultVisible, setResult_visible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(false);
 
-  
 
-   _updateAdresse(){
-        get_random_adress(this.props.token).then(data => this.setState({adresse : {
-            id: data.id,
-            num: data.num,
-            rue: data.rue,
-            cp: data.cp,
-            com: data.com}}));
-    }
-
-    componentDidMount(){
-        this._updateAdresse()
-    }
-
-    _onRegionChangeComplete(region){
-        this.setState({ region:  region})
-    }
-    
-    _toggleScoreVisibility(){
-        this.setState({result_visible: !this.state.result_visible})
-        if(this.state.result_visible){
-            this._updateAdresse()
-            this._toggleTicketVisibility()
+    const toggleResultVisibility = () =>{
+        if (resultVisible) {
+            generateRandomAdress();
+            setTicketVisible(true);
         }
+        setResult_visible(!resultVisible);
+    };
+
+    const generateRandomAdress = () => {
+        getRandomAdress().then(data => 
+            setAdressToGuess(data)
+        );
     }
 
-    _toggleTicketVisibility(){
-        this.setState({ticket_visible: !this.state.ticket_visible})
-    }
+    // generates random adress when component is mounted
+    useEffect(() => {
+        generateRandomAdress()
+    }, []);
 
-
-  // TODO: add PROVIDER_GOOGLE for GM on iOS
-  render(){
     return(
-      <View style={styles.container}>
+        <View style={styles.container}>
         
-        <MapGuesserResults
-            id={this.state.adresse.id}
-            num={this.state.adresse.num}
-            rue={this.state.adresse.rue}
-            cp={this.state.adresse.cp}
-            com={this.state.adresse.com}
-            latGuessed={this.state.region.latitude}
-            lonGuessed={this.state.region.longitude}
-            token={this.props.token}
-            closeModalFunction={() => this._toggleScoreVisibility()}
-            visible={this.state.result_visible}>
-        </MapGuesserResults>
-    
-        <Modal
-        transparent={true}
-        animationType='fade'
-        visible={this.state.ticket_visible}>
-            <View 
-            style={styles.centeredView}>
+        {(resultVisible && adressToGuess?.id && cursor?.latitude) && (
+            <MapGuesserResults
+                adress={adressToGuess}
+                cursor={cursor}
+                closeModalFunction={() => toggleResultVisibility()}/>
+        )}
+        
+        {adressToGuess?.id && (
+            <Modal
+            transparent={true}
+            animationType='fade'
+            visible={ticketVisible}>
                 <View 
-                style={styles.ticketContainer}>
+                style={styles.centeredView}>
                     <View 
-                    style={styles.ticket}>
+                    style={styles.ticketContainer}>
                         <View 
-                            pointerEvents="box-none"
-                            style={styles.ticketButton}>
-                            <TouchableOpacity 
-                                style={styles.ticketButtonContainer}
-                                onPress={() => this._toggleTicketVisibility()}>
-                                <Text style={styles.ticketButtonText}>
-                                    GOT IT !
+                        style={styles.ticket}>
+                            <View 
+                                pointerEvents="box-none"
+                                style={styles.ticketButton}>
+                                <TouchableOpacity 
+                                    style={styles.ticketButtonContainer}
+                                    onPress={() => setTicketVisible(false)}>
+                                    <Text style={styles.ticketButtonText}>
+                                        GOT IT !
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View
+                            style={styles.ticketHole}>
+                                {[...Array(20)].map((e, i) => <View style={styles.circle} key={i}></View>)}
+                            </View>
+
+                            <View
+                            style={styles.ticketTextZone}>
+                                <Text style={styles.ticketText}>
+                                    INTERVENTION N°1234{"\n"}{"\n"}{"\n"}
+                                    ADRESSE: {adressToGuess.num} {adressToGuess.rue} {"\n"}
+                                    COMMUNE: {adressToGuess.cp} {adressToGuess.com} {"\n"}
                                 </Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View
-                        style={styles.ticketHole}>
-                            {[...Array(this.n)].map((e, i) => <View style={styles.circle} key={i}></View>)}
-                        </View>
-
-                        <View
-                        style={styles.ticketTextZone}>
-                            <Text style={styles.ticketText}>
-                                INTERVENTION N°1234{"\n"}{"\n"}{"\n"}
-                                ADRESSE: {this.state.adresse.num} {this.state.adresse.rue} {"\n"}
-                                COMMUNE: {this.state.adresse.cp} {this.state.adresse.com} {"\n"}
-                            </Text>
-                        </View>
-                        
-                        <View
-                        style={styles.ticketHole}>
-                            {[...Array(this.n)].map((e, i) => <View style={styles.circle} key={i}></View>)}
+                                <Text>lat: {cursor?.latitude? cursor.latitude : "no"}</Text>
+                                <Text>rue: {adressToGuess?.rue? adressToGuess.rue : "no"}</Text>
+                            </View>
+                            
+                            <View
+                            style={styles.ticketHole}>
+                                {[...Array(20)].map((e, i) => <View style={styles.circle} key={i}></View>)}
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-        </Modal>
+            </Modal>
+        )}
         
 
         <View style={styles.mapContainer}>
             <MapView 
+                // @ts-ignore
                 style={styles.map} 
-                region={this.state.region}
-                onRegionChangeComplete={(region) => this._onRegionChangeComplete(region)}
+                region={cursor}
+                onRegionChangeComplete={(region) => setCursor(region)}
                 customMapStyle={mapStyle}
             >   
             </MapView>
@@ -148,7 +126,7 @@ class MapGuesser extends React.Component{
                 style={styles.ticketButton}>
                 <TouchableOpacity 
                     style={styles.ticketButtonContainer}
-                    onPress={() => this._toggleTicketVisibility()}>
+                    onPress={() => setTicketVisible(true)}>
                     <Text style={styles.ticketButtonText}>
                         WATCH TICKET
                     </Text>
@@ -159,7 +137,7 @@ class MapGuesser extends React.Component{
                 style={styles.sendButton}>
                 <TouchableOpacity 
                     style={styles.sendButtonContainer}
-                    onPress={() => this._toggleScoreVisibility()}>
+                    onPress={() => toggleResultVisibility()}>
                     <Text style={styles.sendButtonText}>
                         SEND
                     </Text>
@@ -168,8 +146,7 @@ class MapGuesser extends React.Component{
         </View>
       </View>
     );
-  }
-}
+};
 
 const styles = StyleSheet.create({
     centeredView:{
@@ -291,9 +268,4 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = (state) => {
-    return {
-        token: state.token
-    }
-}
-export default connect(mapStateToProps)(MapGuesser)
+export default MapGuesser

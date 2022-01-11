@@ -1,61 +1,77 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import MapView from 'react-native-maps';
 import {Marker, Polygon} from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator} from 'react-native'
-import {get_evaluation} from '../API/mvp-district-API.js'
+import {getEvaluation} from '../API/mvp-district-API'
 
 
+interface results {
+    latAdress: number;
+    lonAdress: number;
+    distance: number;
+    score: number;
+}
 
+interface adress {
+    id: string;
+    num: string;
+    rue: string;
+    cp: string;
+    com: string;
+};
+
+interface cursor {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+}
+
+
+export type Props = {
+    adress: adress;
+    cursor: cursor;
+    closeModalFunction: () => void;
+  };
 
 // modal showing the results of the guess and a map with the right point
-class MapGuesserResults extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {
-        latAdress: 48.77687769018972,
-        lonAdress: 2.000842701780273,
-        distance: null,
-        score: null
-    }
-  }
+export const MapGuesserResults: React.FC<Props> = ({
+    adress,
+    cursor,
+    closeModalFunction,
+}) => {
+    const [results, setResults]: [results, Dispatch<SetStateAction<results>>] = React.useState(null);
 
-  
-    _get_evaluation(){
-        this.setState({
-            score: null,
-            distance: null
-        })        
-        get_evaluation(this.props.token, 
-            this.props.id, 
-            this.props.latGuessed, 
-            this.props.lonGuessed).then(data => this.setState({
+    const evaluate = () => {
+        getEvaluation({
+            id: adress.id, 
+            lat: cursor.latitude, 
+            lon: cursor.longitude,
+        }).then(data => {
+            setResults({
                 score: data.score,
                 distance: data.distance,
-                latAdress: parseFloat(data.lat),
-                lonAdress: parseFloat(data.lon)
-            }))
+                latAdress: data.lat,
+                lonAdress: data.lon
+            })
+        });
     }
 
 
-  // TODO: add PROVIDER_GOOGLE for GM on iOS
-  render(){
     return(
         <Modal
         transparent={true}
         animationType='fade'
-        visible={this.props.visible}
-        onShow={() => this._get_evaluation()}>
+        onShow={evaluate}>
             <View 
             style={styles.centeredView}>
                 <View style={styles.container}>
                     <View style={styles.scoreContainer}>
-                        {this.state.score!=null?
-                            
+                        {results?.score!=null ?
                             <Text style={styles.scoreText}>
-                                Your score is {Math.round(this.state.score*100)/100} !!{"\n"}
-                                (Distance is ({Math.round(this.state.distance)}m)
+                                Your score is {Math.round(results.score*100)/100} !!{"\n"}
+                                (Distance is ({Math.round(results.distance)}m)
                             </Text>
-                            
                         :
                             <ActivityIndicator
                             color='#000000'
@@ -65,7 +81,7 @@ class MapGuesserResults extends React.Component{
                     </View>
                     
                     <View style={styles.mapContainer}>
-                        {this.state.score=null?
+                        {results?.score==null ?
                             <ActivityIndicator
                             color='#000000'
                             size='large'>
@@ -74,27 +90,28 @@ class MapGuesserResults extends React.Component{
                             <MapView 
                             style={styles.map} 
                             region={{
-                                latitude: (this.props.latGuessed+this.state.latAdress)/2,
-                                longitude: (this.props.lonGuessed+this.state.lonAdress)/2,
-                                latitudeDelta: ((this.props.latGuessed-this.state.latAdress)**2)**0.5+0.005,
-                                longitudeDelta: ((this.props.lonGuessed-this.state.lonAdress)**2)**0.5+0.005,
+                                latitude: (cursor.latitude+results.latAdress)/2,
+                                longitude: (cursor.longitude+results.lonAdress)/2,
+                                latitudeDelta: ((cursor.latitude-results.latAdress)**2)**0.5+0.005,
+                                longitudeDelta: ((cursor.longitude-results.lonAdress)**2)**0.5+0.005,
                                 }}> 
+                                {/* guessed */}
                                 <Marker
-                                coordinate={{ latitude : this.props.latGuessed , longitude : this.props.lonGuessed }}
+                                coordinate={{ latitude : cursor.latitude , longitude : cursor.longitude }}
                                 title={'guessed'}
                                 description={'descr'}>
                                 </Marker>
-
+                                {/* true */}
                                 <Marker
-                                coordinate={{ latitude : this.state.latAdress , longitude : this.state.lonAdress }}
+                                coordinate={{ latitude : results.latAdress , longitude : results.lonAdress }}
                                 title={'true'}
                                 description={'descr'}>
                                 </Marker>
 
                                 <Polygon
                                 coordinates={[
-                                    { latitude : this.props.latGuessed , longitude : this.props.lonGuessed },
-                                    { latitude : this.state.latAdress , longitude : this.state.lonAdress }
+                                    { latitude : cursor.latitude , longitude : cursor.longitude },
+                                    { latitude : results.latAdress , longitude : results.lonAdress }
                                 ]}>
                                 </Polygon>
                             </MapView>
@@ -103,7 +120,7 @@ class MapGuesserResults extends React.Component{
 
                     <TouchableOpacity
                     style={styles.closeButtonContainer}
-                    onPress={() => this.props.closeModalFunction()}>
+                    onPress={closeModalFunction}>
                         <Text style={styles.closeButtonText}>CLOSE</Text>
                     </TouchableOpacity>
                 </View>
@@ -111,7 +128,6 @@ class MapGuesserResults extends React.Component{
         </Modal>
         
     );
-  }
 }
 
 const styles = StyleSheet.create({
