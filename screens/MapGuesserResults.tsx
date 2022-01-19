@@ -1,8 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import MapView from 'react-native-maps';
 import {Marker, Polygon} from 'react-native-maps';
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator} from 'react-native'
+import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Image} from 'react-native'
 import {getEvaluation} from '../API/mvp-district-API'
+
+const guessedIcon = require('../assets/fireTruckEmoji.png')
+const trueIcon = require('../assets/fireGif.webp')
 
 
 interface results {
@@ -45,8 +48,8 @@ export const MapGuesserResults: React.FC<Props> = ({
     const evaluate = () => {
         getEvaluation({
             id: adress.id, 
-            lat: cursor.latitude, 
-            lon: cursor.longitude,
+            lat: parseFloat(cursor.latitude.toFixed(5)), 
+            lon: parseFloat(cursor.longitude.toFixed(5)),
         }).then(data => {
             setResults({
                 score: data.score,
@@ -100,12 +103,14 @@ export const MapGuesserResults: React.FC<Props> = ({
                                 coordinate={{ latitude : cursor.latitude , longitude : cursor.longitude }}
                                 title={'guessed'}
                                 description={'descr'}>
+                                    <Image source={guessedIcon} style={{height: 25, width:25 }} />
                                 </Marker>
                                 {/* true */}
                                 <Marker
                                 coordinate={{ latitude : results.latAdress , longitude : results.lonAdress }}
                                 title={'true'}
                                 description={'descr'}>
+                                    <Image source={trueIcon} style={{height: 40, width:40 }} />
                                 </Marker>
 
                                 <Polygon
