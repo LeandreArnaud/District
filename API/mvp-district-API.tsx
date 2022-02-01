@@ -23,11 +23,15 @@ interface guess {
   lon: number;
 }
 
-export const getRandomAdress = (): Promise<adress> => {
+export const getRandomAdress = (coms: string): Promise<adress> => {
   const url = URL+'/get_random_adress';
+
+  const headerData = new Headers();
+  headerData.append('coms', coms);
 
   return fetch(url, {
     method:'get',
+    headers: headerData
   })
     .then((response) => response.json())
     .catch((error) => console.error(error));
