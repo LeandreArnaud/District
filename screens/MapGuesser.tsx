@@ -39,7 +39,7 @@ export const MapGuesser: React.FC = ({}) => {
     };
 
     const generateRandomAdress = () => {
-        getRandomAdress('trappes').then(data => 
+        getRandomAdress("'trappes'").then(data => 
             setAdressToGuess(data)
         );
     }
