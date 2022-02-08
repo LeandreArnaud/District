@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import MapView from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal} from 'react-native'
-import {getRandomAdress} from '../API/mvp-district-API'
-import mapStyle from '../GMStyles/BlindMapStyle.js'
+import {getRandomAdress} from '../../API/mvp-district-API'
+import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
 
 

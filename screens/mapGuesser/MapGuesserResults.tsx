@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction } from 'react'
 import MapView from 'react-native-maps';
 import {Marker, Polygon} from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Image} from 'react-native'
-import {getEvaluation} from '../API/mvp-district-API'
+import {getEvaluation} from '../../API/mvp-district-API'
 
-const guessedIcon = require('../assets/fireTruckEmoji.png')
-const trueIcon = require('../assets/fireGif.webp')
+const guessedIcon = require('../../assets/fireTruckEmoji.png')
+const trueIcon = require('../../assets/fireGif.webp')
 
 
 interface results {

@@ -23,6 +23,16 @@ interface guess {
   lon: number;
 }
 
+export const getComs = () => {
+  const url = URL+'/get_coms';
+
+  return fetch(url, {
+    method:'get',
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+};
+
 export const getRandomAdress = (coms: string): Promise<adress> => {
   const url = URL+'/get_random_adress';
 
@@ -35,7 +45,7 @@ export const getRandomAdress = (coms: string): Promise<adress> => {
   })
     .then((response) => response.json())
     .catch((error) => console.error(error));
-}
+};
 
 export const getEvaluation = (guess: guess): Promise<evaluation> => {
   const url = URL+'/get_evaluation';
@@ -51,4 +61,4 @@ export const getEvaluation = (guess: guess): Promise<evaluation> => {
   })
     .then(response => response.json())
     .catch(error => console.error(error))
-}
+};

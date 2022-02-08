@@ -10,7 +10,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
         <View style={styles.mainContainer}>
             <Text style={styles.h1}>Tools</Text>
             <View style={styles.toolsContainer}>
-            <TouchableOpacity style={styles.tool} onPress={()=>navigation.navigate('MapGuesser')}>
+            <TouchableOpacity style={styles.tool} onPress={()=>navigation.navigate('DistrictSelector')}>
                 <Text style={styles.toolText}>🌎 MapGuesser</Text>
             </TouchableOpacity>
             </View>
