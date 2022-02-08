@@ -7,8 +7,8 @@ const Stack = createStackNavigator();
 const MyStack = ()=>{
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Homepage" component={Homepage} options={{headerShown: false}}/>
       <Stack.Screen name="MapGuesser" component={MapGuesser} />
-      <Stack.Screen name="Homepage" component={Homepage} />
     </Stack.Navigator>
   );
 }
