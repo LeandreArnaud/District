@@ -1,12 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import { getComs } from '../../API/mvp-district-API';
 
-const initComs = [
-    {com: 'Trappes', com_norm: 'trappes', cp: '78190'},
-    {com: 'Rambouillet', com_norm: 'rambouillet', cp: '78120'},
-];
+
 type DistrictSelectorProps = { navigation: any };
 
 export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }) => {
@@ -14,10 +11,9 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
     const [coms, setCOms]: [any, any] = React.useState([]);
 
     const fetchCities = () => {
-        // getComs().then(data => setCOms(data))
-        setCOms(initComs);
-        getComs().then(data => console.log('data', data));
-        console.log('research', research);
+        getComs().then(data => setCOms(data?.communes?.map(elt => {
+            return {...elt, selected: false}
+        })));
     };
 
     return(
@@ -32,11 +28,19 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
                 <Text>Search</Text>
             </TouchableOpacity>
 
-            {coms.length>0 && 
-                coms.map(elt => 
-                    <Text>{elt.com}</Text>
-                )
-            }
+            <View style={styles.availableCitiesContainer}>
+                <ScrollView>
+                    {coms.length>0 && 
+                        coms.map(elt => 
+                            <TouchableOpacity style={styles.availableCityCell}>
+                                <Text>{elt.selected ? '-' : '+' }</Text>
+                                <Text>{elt.COM}</Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                </ScrollView>
+            </View>
+            
             <TouchableOpacity onPress={() => navigation.navigate('MapGuesser')}>
                 <Text>start</Text>
             </TouchableOpacity>
@@ -51,7 +55,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingTop: 40,
-        },
+    },
+    availableCitiesContainer: {
+        height: 200,
+    },
+    availableCityCell: {
+        height: 20,
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: 'gray',
+        marginVertical: 3
+    }
 });
 
 
