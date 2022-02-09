@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import { getComs } from '../../API/mvp-district-API';
@@ -7,14 +7,36 @@ import { getComs } from '../../API/mvp-district-API';
 type DistrictSelectorProps = { navigation: any };
 
 export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }) => {
-    const [research, setResearch]: [any, any] = React.useState('init');
-    const [coms, setCOms]: [any, any] = React.useState([]);
+    const [research, setResearch]: [any, any] = React.useState();
+    const [coms, setComs]: [any, any] = React.useState([]);
+    const [comsFiltered, setComsFiltered]: [any, any] = React.useState([]);
 
     const fetchCities = () => {
-        getComs().then(data => setCOms(data?.communes?.map(elt => {
+        getComs().then(data => setComs(data?.communes?.map(elt => {
             return {...elt, selected: false}
         })));
     };
+
+    const toggleCity = (com, cp) => {
+        setComs(coms.map(elt => {
+            if (elt.COM === com && elt.CP === cp) {
+                return {...elt, selected: !elt.selected}
+            }
+            return elt
+        }));
+    };
+
+    useEffect(()=>{
+        fetchCities();
+    }, [])
+
+    useEffect(()=>{
+        if (research) {
+            setComsFiltered(coms.filter(elt => elt.COM.toUpperCase().includes(research.toUpperCase())));
+        } else {
+            setComsFiltered(coms);
+        }
+    }, [research, coms])
 
     return(
         <View style={styles.mainContainer}>
@@ -22,17 +44,14 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
             <TextInput 
                 onChangeText={text => setResearch(text)} 
                 placeholder='City name' 
-                onSubmitEditing={() => fetchCities()}
+                onSubmitEditing={() => {}}
             />
-            <TouchableOpacity onPress={() => fetchCities()}>
-                <Text>Search</Text>
-            </TouchableOpacity>
 
             <View style={styles.availableCitiesContainer}>
                 <ScrollView>
-                    {coms.length>0 && 
-                        coms.map(elt => 
-                            <TouchableOpacity style={styles.availableCityCell}>
+                    {comsFiltered.length>0 && 
+                        comsFiltered.map(elt => 
+                            <TouchableOpacity style={styles.availableCityCell} onPress={() => toggleCity(elt.COM, elt.CP)} key={elt.COM.concat(elt.CP)}>
                                 <Text>{elt.selected ? '-' : '+' }</Text>
                                 <Text>{elt.COM}</Text>
                             </TouchableOpacity>
