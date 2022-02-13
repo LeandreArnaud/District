@@ -16,9 +16,9 @@ interface district {
     cities: city[];
 };
 
-type DistrictSelectorProps = { navigation: any };
+type DistrictCreatorProps = { navigation: any };
 
-export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }) => {
+export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) => {
     const [research, setResearch]: [any, any] = React.useState();
     const [districtName, setDistrictName]: [string, Dispatch<SetStateAction<string>>] = React.useState('');
     const [coms, setComs]: [any, any] = React.useState([]);
@@ -174,4 +174,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default DistrictSelector
+export default DistrictCreator

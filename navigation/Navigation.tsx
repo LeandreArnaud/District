@@ -1,6 +1,6 @@
 import MapGuesser from '../screens/mapGuesser/MapGuesser'
 import Homepage from '../screens/Homepage';
-import DistrictSelector from '../screens/mapGuesser/DistrictSelector'
+import DistrictCreator from '../screens/mapGuesser/DistrictCreator'
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -9,7 +9,7 @@ const MyStack = ()=>{
   return (
     <Stack.Navigator>
       <Stack.Screen name="Homepage" component={Homepage} options={{headerShown: false}}/>
-      <Stack.Screen name="DistrictSelector" component={DistrictSelector} />
+      <Stack.Screen name="DistrictCreator" component={DistrictCreator} />
       <Stack.Screen name="MapGuesser" component={MapGuesser} />
     </Stack.Navigator>
   );
