@@ -1,16 +1,77 @@
-import React, { useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import { getComs } from '../../API/mvp-district-API';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface city {
+    COM: string;
+    CP: string;
+    COM_NORM: string;
+};
+interface district {
+    name: string;
+    centerLat: number;
+    centerLon: number;
+    cities: city[];
+};
 
 type DistrictSelectorProps = { navigation: any };
 
 export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }) => {
     const [research, setResearch]: [any, any] = React.useState();
-    const [districtName, setDistrictName]: [any, any] = React.useState([]);
+    const [districtName, setDistrictName]: [string, Dispatch<SetStateAction<string>>] = React.useState('');
     const [coms, setComs]: [any, any] = React.useState([]);
     const [comsFiltered, setComsFiltered]: [any, any] = React.useState([]);
+    const [submitIsProcessing, setSubmitIsProcessing]: [any, any] = React.useState(false);
+    const [existingDistricts, setExistingDistricts]: [district[]|undefined, Dispatch<SetStateAction<district[]|undefined>>] = React.useState();
+
+    // submit a new district
+    const submitDistrict = async () => {
+        setSubmitIsProcessing(true);
+
+        if (!coms.filter(ci => ci.selected).length || !districtName){
+            console.log('no coms or district name')
+            setSubmitIsProcessing(false);
+            return
+        };
+
+        const myDistricts: district = {
+            name: districtName,
+            centerLat: 1.0,
+            centerLon: 1.0,
+            cities: coms.filter(ci => ci.selected).map(ci => {
+                return {'COM': ci.COM, 'CP': ci.CP, 'COM_NORM': ci.COM_NORM}
+            }),
+        };
+        let newDistricts: district[];
+        if (existingDistricts){
+            newDistricts = [...existingDistricts.filter(di => di.name!==districtName), myDistricts];
+        } else {
+            newDistricts = [myDistricts];
+        }
+        try {
+            await AsyncStorage.setItem('savedDistricts', JSON.stringify(newDistricts))
+        } catch (e) {
+            console.log('impossible to write existings districts')
+        }
+
+        navigation.navigate('MapGuesser');
+        setSubmitIsProcessing(false);
+    };
+
+    // read existing savec districts
+    const readExistringsDistricts = async () => {
+        try {
+            const value = await AsyncStorage.getItem('savedDistricts')
+            if(value !== null) {
+                setExistingDistricts(JSON.parse(value));
+                console.log('existings districts: ', JSON.parse(value))
+            }
+        } catch(e) {
+            console.log('impossible to read existings districts')
+        }
+    };
 
     const fetchCities = () => {
         getComs().then(data => setComs(data?.communes?.map(elt => {
@@ -29,6 +90,7 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
 
     useEffect(()=>{
         fetchCities();
+        readExistringsDistricts();
     }, [])
 
     useEffect(()=>{
@@ -78,9 +140,15 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
                 </ScrollView>
             </View>
             
-            <TouchableOpacity onPress={() => navigation.navigate('MapGuesser')}>
-                <Text>start</Text>
-            </TouchableOpacity>
+            {submitIsProcessing
+                ? <Text>processing...</Text> 
+                : !coms.filter(ci => ci.selected).length || !districtName 
+                    ? <Text>fill district name and select minimum 1 city</Text> 
+                    : <TouchableOpacity onPress={submitDistrict}>
+                        <Text>start</Text>
+                      </TouchableOpacity>
+            }
+            
         </View>
     );
 };
