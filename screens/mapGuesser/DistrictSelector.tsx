@@ -8,6 +8,7 @@ type DistrictSelectorProps = { navigation: any };
 
 export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }) => {
     const [research, setResearch]: [any, any] = React.useState();
+    const [districtName, setDistrictName]: [any, any] = React.useState([]);
     const [coms, setComs]: [any, any] = React.useState([]);
     const [comsFiltered, setComsFiltered]: [any, any] = React.useState([]);
 
@@ -40,20 +41,37 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({ navigation }
 
     return(
         <View style={styles.mainContainer}>
+            <Text>Creating new district:</Text>
+            <TextInput 
+                onChangeText={text => setDistrictName(text)} 
+                placeholder='District name' 
+            />
+
             <Text>Enter a city name</Text>
             <TextInput 
                 onChangeText={text => setResearch(text)} 
                 placeholder='City name' 
-                onSubmitEditing={() => {}}
             />
 
             <View style={styles.availableCitiesContainer}>
                 <ScrollView>
                     {comsFiltered.length>0 && 
-                        comsFiltered.map(elt => 
+                        comsFiltered.filter(elt => !elt.selected).map(elt => 
                             <TouchableOpacity style={styles.availableCityCell} onPress={() => toggleCity(elt.COM, elt.CP)} key={elt.COM.concat(elt.CP)}>
-                                <Text>{elt.selected ? '-' : '+' }</Text>
-                                <Text>{elt.COM}</Text>
+                                <Text>{`add ${elt.COM} - ${elt.CP}`}</Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                </ScrollView>
+            </View>
+            
+            <Text>Selected cities</Text>
+            <View style={styles.availableCitiesContainer}>
+                <ScrollView>
+                    {comsFiltered.length>0 && 
+                        comsFiltered.filter(elt => elt.selected).map(elt => 
+                            <TouchableOpacity style={styles.availableCityCell} onPress={() => toggleCity(elt.COM, elt.CP)} key={elt.COM.concat(elt.CP)}>
+                                <Text>{`remove ${elt.COM} - ${elt.CP}`}</Text>
                             </TouchableOpacity>
                         )
                     }
