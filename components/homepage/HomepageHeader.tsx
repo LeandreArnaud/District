@@ -1,6 +1,7 @@
 import React from 'react'
 import {StyleSheet, View, Text, Image} from 'react-native'
 import text from '../../assets/text/text-fr.json'
+import icons from '../../assets/icons/iconManager';
 
 
 export const HomepageHeader: React.FC = () => {
@@ -9,7 +10,7 @@ export const HomepageHeader: React.FC = () => {
         <View style={styles.header}>
             <Image
                 style={styles.headerIcon}
-                source={require('../../assets/icons/hydrant.png')}
+                source={icons["hydrant"]}
             />
             <View style={styles.headerTextContainer}>
                 <Text style={styles.h1}>{text.homepage.title}</Text>

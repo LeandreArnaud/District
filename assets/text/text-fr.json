@@ -10,5 +10,10 @@
                 "pushingPage": "DistrictCreator"
             }
         ]
+    },
+    "DistrictSelectorModal": {
+        "title": "Choisissez un District",
+        "subtitle": "pour Map Guesser",
+        "icon": "earth"
     }
 }

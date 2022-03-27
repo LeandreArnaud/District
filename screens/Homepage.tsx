@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native'
 import text from '../assets/text/text-fr.json'
+import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal';
 import HomepageHeader from '../components/homepage/HomepageHeader';
 import ToolCell from '../components/homepage/ToolCell';
 
@@ -8,6 +9,7 @@ import ToolCell from '../components/homepage/ToolCell';
 type HomePageProps = { navigation: any };
 
 export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
+    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState(true);
 
     return(
         <View style={styles.mainContainer}>
@@ -18,6 +20,8 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
                 <ToolCell tool={tool} navigation={navigation}/>
             )}
             </View>
+
+            {districtSelectionModalEnable &&  <DistrictSelectorModal/>}
         </View>
     );
 };
@@ -34,6 +38,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
         width: '100%',
+        zIndex: 1,
     },
 });
 
