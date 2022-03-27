@@ -1,6 +1,6 @@
 import React from 'react'
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native'
-import text from '../../assets/text/text-fr.json'
+import icons from '../../assets/icons/iconManager';
 
 type toolType = {
     title: string,
@@ -11,12 +11,12 @@ type toolType = {
 type HomePageProps = { navigation: any, tool: toolType };
 
 export const ToolCell: React.FC<HomePageProps> = ({ navigation, tool }) => {
-
     return(
         <TouchableOpacity style={styles.toolCardBody} onPress={()=>navigation.navigate(tool.pushingPage)} key={tool.title}>
             <Image
                 style={styles.toolIcon}
-                source={require(`../assets/icons/${tool.icon}`)}
+                // @ts-ignore
+                source={icons[tool.icon]}
             />
             <View style={styles.toolCardBodyRight}>
                 <Text style={styles.toolTitle}>{tool.title}</Text>

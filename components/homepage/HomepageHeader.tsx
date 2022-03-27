@@ -9,7 +9,7 @@ export const HomepageHeader: React.FC = () => {
         <View style={styles.header}>
             <Image
                 style={styles.headerIcon}
-                source={require('../assets/icons/hydrant.png')}
+                source={require('../../assets/icons/hydrant.png')}
             />
             <View style={styles.headerTextContainer}>
                 <Text style={styles.h1}>{text.homepage.title}</Text>
