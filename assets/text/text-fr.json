@@ -6,7 +6,8 @@
             {
                 "title": "MapGuesser",
                 "description": "Apprenez votre secteur ! Cet outil vous donne une adresse et une carte vierge, à vous de trouver l'adresse !",
-                "icon": "earth"
+                "icon": "earth.png",
+                "pushingPage": "DistrictCreator"
             }
         ]
     }
