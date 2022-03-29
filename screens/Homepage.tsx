@@ -5,6 +5,13 @@ import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal'
 import HomepageHeader from '../components/homepage/HomepageHeader';
 import ToolCell from '../components/homepage/ToolCell';
 
+const savedDistricts = [{
+    shortname: "MLB",
+    cities: [
+        {name: "trappes", CP: "78190"},
+        {name: "Rambouillet", CP: "78120"},
+    ]
+}];
 
 type HomePageProps = { navigation: any };
 
@@ -21,7 +28,10 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
             )}
             </View>
 
-            {districtSelectionModalEnable &&  <DistrictSelectorModal/>}
+            {districtSelectionModalEnable && <DistrictSelectorModal 
+                hideModal={() => setDistrictSelectionModalEnable(false)}
+                districts={savedDistricts}
+            />}
         </View>
     );
 };
