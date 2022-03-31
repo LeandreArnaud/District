@@ -5,13 +5,16 @@ import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal'
 import HomepageHeader from '../components/homepage/HomepageHeader';
 import ToolCell from '../components/homepage/ToolCell';
 
-const savedDistricts = [{
-    shortname: "MLB",
-    cities: [
-        {name: "trappes", CP: "78190"},
-        {name: "Rambouillet", CP: "78120"},
-    ]
-}];
+// const savedDistricts = [
+//     {
+//         shortname: "MLB",
+//         cities: [
+//             {name: "trappes", CP: "78190"},
+//             {name: "Rambouillet", CP: "78120"},
+//         ]
+//     },
+// ];
+const savedDistricts: {name: string, CP:string}[] = []
 
 type HomePageProps = { navigation: any };
 

@@ -14,6 +14,11 @@
     "DistrictSelectorModal": {
         "title": "Choisissez un District",
         "subtitle": "pour Map Guesser",
-        "icon": "earth"
+        "icon": "earth",
+        "cityOverflow": {
+            "and": "et",
+            "more": "autres..."
+        },
+        "add": "Ajouter un district"
     }
 }

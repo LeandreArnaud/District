@@ -9,6 +9,15 @@ type districtType = {shortname: string, cities: cityType[]}
 type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[] };
 
 export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts}) => {
+
+    const maxCitiesDisplayed = 4;
+
+    const cityLine = (city: cityType) => (
+        <View style={styles.districtCityContainer}>
+            <Text numberOfLines={1} style={styles.districtCityName}>{city.name}</Text>
+            <Text>{city.CP}</Text>
+        </View>
+    );
     return(
         <View style={styles.container}>
             <TouchableOpacity style={styles.backgroundBlur} onPress={hideModal}/>
@@ -28,17 +37,24 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
 
                 {districts.map(dis => 
                     <View style={styles.districtCellContainer}>
-                        <Text style={styles.districtCellTitle}>{dis.shortname}</Text>
+                        <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
-                            {dis.cities.map(cit => 
-                                <View style={styles.districtCityContainer}>
-                                    <Text>{cit.name}</Text>
-                                    <Text>{cit.CP}</Text>
-                                </View>
-                            )}
+                            {dis.cities.length <= maxCitiesDisplayed+1
+                                ? dis.cities.map(cit => cityLine(cit))
+                                : dis.cities
+                                    .slice(0, maxCitiesDisplayed)
+                                    .concat([{name: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: ""}])
+                                    .map(cit => cityLine(cit))
+                            }
                         </View>
                     </View>
                 )}
+
+                <View style={styles.addButtonContainer}>
+                    <TouchableOpacity style={styles.addButtonTouchable}>
+                        <Text style={styles.addButtonText}>{text.DistrictSelectorModal.add}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -58,14 +74,14 @@ const styles = StyleSheet.create({
         opacity: 0.4,
     },
     modaleContainter: {
+        backgroundColor: "#FFFFFF",
         position: "absolute",
         bottom: 0,
-        backgroundColor: "#FFFFFF",
         width: "100%",
-        height: 300,
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
         paddingTop: 20,
+        paddingBottom: 70,
         paddingHorizontal: 10,
     },
     modaleTitleContainter: {
@@ -97,22 +113,25 @@ const styles = StyleSheet.create({
         lineHeight: 15,
     },
     districtCellContainer: {
-        height: 70,
+        height: 80,
         flex: 0,
         flexDirection: "row",
         paddingRight: 10,
         paddingVertical: 5,
         borderRadius: 7,
-        elevation: 4,
+        elevation: 3,
         shadowColor: "#000000",
+        backgroundColor: "#FFFFFF",
+        marginBottom: 10,
     },
     districtCellTitle: {
         textAlign: "center",
         textAlignVertical: "center",
-        color: "red",
+        color: "#DAAC08",
         fontSize: 30,
+        width: "25%",
         fontWeight: "bold",
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
     },
     districtCitiesContainer: {
         flex: 1,
@@ -122,6 +141,31 @@ const styles = StyleSheet.create({
         flex: 0,
         flexDirection: "row",
         justifyContent: "space-between"
+    },
+    districtCityName: {
+        width: "85%"
+    },
+    addButtonContainer: {
+        marginTop: 20,
+        width: "100%",
+        flex: 0,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    addButtonTouchable: {
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        backgroundColor: "#DAAC08",
+        flex: 0,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
+        elevation: 3,
+        shadowColor: "#000000",
+    },
+    addButtonText: {
+        color: "#FFFFFF",
+        fontWeight: "bold",
     },
 });
 
