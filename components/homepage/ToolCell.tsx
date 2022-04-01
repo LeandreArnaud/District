@@ -8,11 +8,11 @@ type toolType = {
     icon: string,
     pushingPage: string,
 };
-type HomePageProps = { navigation: any, tool: toolType };
+type HomePageProps = { tool: toolType, onPress: () => void };
 
-export const ToolCell: React.FC<HomePageProps> = ({ navigation, tool }) => {
+export const ToolCell: React.FC<HomePageProps> = ({ tool, onPress }) => {
     return(
-        <TouchableOpacity style={styles.toolCardBody} onPress={()=>navigation.navigate(tool.pushingPage)} key={tool.title}>
+        <TouchableOpacity style={styles.toolCardBody} onPress={onPress} key={tool.title}>
             <Image
                 style={styles.toolIcon}
                 // @ts-ignore

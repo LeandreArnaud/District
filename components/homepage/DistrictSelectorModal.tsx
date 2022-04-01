@@ -6,9 +6,9 @@ import text from '../../assets/text/text-fr.json'
 type cityType = {name: string, CP: string}
 type districtType = {shortname: string, cities: cityType[]}
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[] };
+type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[], opentool: () => void };
 
-export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts}) => {
+export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool}) => {
 
     const maxCitiesDisplayed = 4;
 
@@ -36,7 +36,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                 </View>
 
                 {districts.map(dis => 
-                    <View style={styles.districtCellContainer}>
+                    <TouchableOpacity style={styles.districtCellContainer} onPress={opentool}>
                         <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
                             {dis.cities.length <= maxCitiesDisplayed+1
@@ -47,7 +47,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                                     .map(cit => cityLine(cit))
                             }
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 )}
 
                 <View style={styles.addButtonContainer}>

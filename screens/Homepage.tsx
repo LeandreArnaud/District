@@ -5,21 +5,24 @@ import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal'
 import HomepageHeader from '../components/homepage/HomepageHeader';
 import ToolCell from '../components/homepage/ToolCell';
 
-// const savedDistricts = [
-//     {
-//         shortname: "MLB",
-//         cities: [
-//             {name: "trappes", CP: "78190"},
-//             {name: "Rambouillet", CP: "78120"},
-//         ]
-//     },
-// ];
-const savedDistricts: {name: string, CP:string}[] = []
+const savedDistricts = [
+    {
+        shortname: "MLB",
+        cities: [
+            {name: "trappes", CP: "78190"},
+            {name: "Rambouillet", CP: "78120"},
+        ]
+    },
+];
+// const savedDistricts: {name: string, CP:string}[] = []
 
 type HomePageProps = { navigation: any };
 
 export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
-    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState(true);
+    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState(false);
+    const [toolToOpen, setToolToOpen] = useState("");
+
+    const openTool = () => navigation.navigate(toolToOpen);
 
     return(
         <View style={styles.mainContainer}>
@@ -27,13 +30,17 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
 
             <View style={styles.toolsContainer}>
             {text.homepage.tools.map(tool => 
-                <ToolCell tool={tool} navigation={navigation}/>
+                <ToolCell tool={tool} onPress={() => {
+                    setToolToOpen(tool.pushingPage)
+                    setDistrictSelectionModalEnable(true)
+                }}/>
             )}
             </View>
 
             {districtSelectionModalEnable && <DistrictSelectorModal 
                 hideModal={() => setDistrictSelectionModalEnable(false)}
                 districts={savedDistricts}
+                opentool={openTool}
             />}
         </View>
     );
