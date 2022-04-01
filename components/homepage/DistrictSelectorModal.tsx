@@ -6,7 +6,7 @@ import text from '../../assets/text/text-fr.json'
 type cityType = {name: string, CP: string}
 type districtType = {shortname: string, cities: cityType[]}
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[], opentool: () => void };
+type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[]|undefined, opentool: () => void };
 
 export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool}) => {
 
