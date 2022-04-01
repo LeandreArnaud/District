@@ -44,6 +44,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
                 hideModal={() => setDistrictSelectionModalEnable(false)}
                 districts={savedDistricts}
                 opentool={openTool}
+                navigation={navigation}
             />}
         </View>
     );

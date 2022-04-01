@@ -6,9 +6,9 @@ import text from '../../assets/text/text-fr.json'
 type cityType = {name: string, CP: string}
 type districtType = {shortname: string, cities: cityType[]}
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[]|undefined, opentool: () => void };
+type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[]|undefined, opentool: () => void, navigation: any };
 
-export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool}) => {
+export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool, navigation}) => {
 
     const maxCitiesDisplayed = 4;
 
@@ -35,7 +35,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                     </View>
                 </View>
 
-                {districts.map(dis => 
+                {districts && districts.map(dis => 
                     <TouchableOpacity style={styles.districtCellContainer} onPress={opentool}>
                         <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
@@ -51,7 +51,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                 )}
 
                 <View style={styles.addButtonContainer}>
-                    <TouchableOpacity style={styles.addButtonTouchable}>
+                    <TouchableOpacity style={styles.addButtonTouchable} onPress={() => navigation.navigate("DistrictCreator")}>
                         <Text style={styles.addButtonText}>{text.DistrictSelectorModal.add}</Text>
                     </TouchableOpacity>
                 </View>
