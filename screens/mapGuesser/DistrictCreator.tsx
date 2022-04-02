@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from 'react-native'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, ColorPropType} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import { getComs } from '../../API/mvp-district-API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CityCell } from '../../components/districtSelector/CityCell';
 
 interface city {
     COM: string;
@@ -16,139 +17,67 @@ interface district {
     cities: city[];
 };
 
+const initialDistrict = {
+    name: "",
+    centerLat: 0,
+    centerLon: 0,
+    cities: [
+        {
+            COM: "rambouillet",
+            CP: "78120",
+            COM_NORM: "Rambouillet",
+        },
+        {
+            COM: "trappes",
+            CP: "78190",
+            COM_NORM: "Trappes",
+        },
+    ]
+};
+
 type DistrictCreatorProps = { navigation: any };
 
 export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) => {
-    const [research, setResearch]: [any, any] = React.useState();
-    const [districtName, setDistrictName]: [string, Dispatch<SetStateAction<string>>] = React.useState('');
-    const [coms, setComs]: [any, any] = React.useState([]);
-    const [comsFiltered, setComsFiltered]: [any, any] = React.useState([]);
-    const [submitIsProcessing, setSubmitIsProcessing]: [any, any] = React.useState(false);
-    const [existingDistricts, setExistingDistricts]: [district[]|undefined, Dispatch<SetStateAction<district[]|undefined>>] = React.useState();
+    const [district, setDistrict] = useState<district>(initialDistrict);
 
-    // submit a new district
-    const submitDistrict = async () => {
-        setSubmitIsProcessing(true);
-
-        if (!coms.filter(ci => ci.selected).length || !districtName){
-            console.log('no coms or district name')
-            setSubmitIsProcessing(false);
-            return
-        };
-
-        const myDistricts: district = {
-            name: districtName,
-            centerLat: 1.0,
-            centerLon: 1.0,
-            cities: coms.filter(ci => ci.selected).map(ci => {
-                return {'COM': ci.COM, 'CP': ci.CP, 'COM_NORM': ci.COM_NORM}
-            }),
-        };
-        let newDistricts: district[];
-        if (existingDistricts){
-            newDistricts = [...existingDistricts.filter(di => di.name!==districtName), myDistricts];
-        } else {
-            newDistricts = [myDistricts];
-        }
-        try {
-            await AsyncStorage.setItem('savedDistricts', JSON.stringify(newDistricts))
-        } catch (e) {
-            console.log('impossible to write existings districts')
-        }
-
-        navigation.navigate('MapGuesser');
-        setSubmitIsProcessing(false);
+    const handleTitleChange = (text: string) => {
+        console.log('text', text);
+        setDistrict({...district, name: text.toUpperCase()});
     };
 
-    // read existing savec districts
-    const readExistringsDistricts = async () => {
-        try {
-            const value = await AsyncStorage.getItem('savedDistricts')
-            if(value !== null) {
-                setExistingDistricts(JSON.parse(value));
-                console.log('existings districts: ', JSON.parse(value))
-            }
-        } catch(e) {
-            console.log('impossible to read existings districts')
-        }
-    };
-
-    const fetchCities = () => {
-        getComs().then(data => setComs(data?.communes?.map(elt => {
-            return {...elt, selected: false}
-        })));
-    };
-
-    const toggleCity = (com, cp) => {
-        setComs(coms.map(elt => {
-            if (elt.COM === com && elt.CP === cp) {
-                return {...elt, selected: !elt.selected}
-            }
-            return elt
-        }));
-    };
-
-    useEffect(()=>{
-        fetchCities();
-        readExistringsDistricts();
-    }, [])
-
-    useEffect(()=>{
-        if (research) {
-            setComsFiltered(coms.filter(elt => elt.COM.toUpperCase().includes(research.toUpperCase())));
-        } else {
-            setComsFiltered(coms);
-        }
-    }, [research, coms])
+    const handleRemovesCity = (COM:string) => {
+        setDistrict({...district, cities: district.cities.filter(ci => ci.COM !== COM)})
+    }
 
     return(
         <View style={styles.mainContainer}>
-            <Text>Creating new district:</Text>
-            <TextInput 
-                onChangeText={text => setDistrictName(text)} 
-                placeholder='District name' 
-            />
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Nouveau district</Text>
+            </View>
 
-            <Text>Enter a city name</Text>
-            <TextInput 
-                onChangeText={text => setResearch(text)} 
-                placeholder='City name' 
-            />
-
-            <View style={styles.availableCitiesContainer}>
-                <ScrollView>
-                    {comsFiltered.length>0 && 
-                        comsFiltered.filter(elt => !elt.selected).map(elt => 
-                            <TouchableOpacity style={styles.availableCityCell} onPress={() => toggleCity(elt.COM, elt.CP)} key={elt.COM.concat(elt.CP)}>
-                                <Text>{`add ${elt.COM} - ${elt.CP}`}</Text>
-                            </TouchableOpacity>
-                        )
-                    }
-                </ScrollView>
+            <View style={styles.formContainer}>
+                <Text>Nom du district (3 lettres max) :</Text>
+                <TextInput 
+                    onChangeText={handleTitleChange} 
+                    placeholder='NOM'
+                    style={styles.textInput}
+                    value={district?.name}
+                    maxLength={3}
+                />
+                <Text>Communes :</Text>
+                <View style={styles.citiesListContainer}>
+                    <View style={styles.citiesList}>
+                        {district?.cities?.map(city => 
+                            <CityCell city={city} onRemove={() => handleRemovesCity(city.COM)}/>
+                        )}
+                    </View>
+                    <Text>add</Text>
+                </View>
             </View>
             
-            <Text>Selected cities</Text>
-            <View style={styles.availableCitiesContainer}>
-                <ScrollView>
-                    {comsFiltered.length>0 && 
-                        comsFiltered.filter(elt => elt.selected).map(elt => 
-                            <TouchableOpacity style={styles.availableCityCell} onPress={() => toggleCity(elt.COM, elt.CP)} key={elt.COM.concat(elt.CP)}>
-                                <Text>{`remove ${elt.COM} - ${elt.CP}`}</Text>
-                            </TouchableOpacity>
-                        )
-                    }
-                </ScrollView>
-            </View>
-            
-            {submitIsProcessing
-                ? <Text>processing...</Text> 
-                : !coms.filter(ci => ci.selected).length || !districtName 
-                    ? <Text>fill district name and select minimum 1 city</Text> 
-                    : <TouchableOpacity onPress={submitDistrict}>
-                        <Text>start</Text>
-                      </TouchableOpacity>
-            }
-            
+            <TouchableOpacity style={styles.submitContainer}>
+                <Text style={styles.submitText}>Créer le district</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -159,17 +88,65 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 40,
     },
-    availableCitiesContainer: {
-        height: 200,
+    titleContainer: {
+        width: "100%",
+        flex: 0,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: 20,
     },
-    availableCityCell: {
-        height: 20,
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: 'gray',
-        marginVertical: 3
+    titleText:{
+        width: "40%",
+        fontSize: 30,
+        fontWeight: "bold",
+        color: "#DAAC08",
+        textAlign: "center",
+    },
+    formContainer: {
+        paddingHorizontal: 10,
+        width: "100%",
+        height: 300,
+    },
+    textInput:{
+        width: "100%",
+        height: 40,
+        backgroundColor: "#E0E0E0",
+        fontSize: 25,
+        paddingHorizontal: 5,
+        borderRadius: 5,
+        fontWeight: "bold",
+        color: "#DAAC08",
+        marginBottom: 20,
+    },
+    citiesListContainer: {
+        backgroundColor: "#E0E0E0",
+        width: "100%",
+        borderRadius: 5,
+        flex: 0,
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    citiesList: {
+        width: "100%",
+        paddingBottom: 60,
+        flex: 0,
+        alignItems: "center",
+    },
+    submitContainer:{
+        position: "absolute",
+        bottom: 40,
+        backgroundColor: "#DAAC08",
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 6,
+        elevation: 3,
+        shadowColor: "#000000",
+    },
+    submitText:{
+        color: "#FFFFFF",
+        fontSize: 14,
+        fontWeight: "bold",
     }
 });
 
