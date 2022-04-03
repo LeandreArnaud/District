@@ -6,13 +6,19 @@ import HomepageHeader from '../components/homepage/HomepageHeader';
 import ToolCell from '../components/homepage/ToolCell';
 import { getDistricts } from '../utile/LocalStorage';
 
-type districts = {
-    shortname: string,
-    cities: {
-        name: string,
-        CP: string,
-    }[]
-}[]
+interface city {
+    COM: string;
+    CP: string;
+    COM_NORM: string;
+};
+interface district {
+    name: string;
+    centerLat: number;
+    centerLon: number;
+    cities: city[];
+};
+
+type districts = district[]
 
 type HomePageProps = { navigation: any };
 
@@ -24,7 +30,9 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
     const openTool = () => navigation.navigate(toolToOpen);
 
     useEffect(()=>{
-        getDistricts().then(res => setSavedDistricts(res));
+        getDistricts().then(res => {
+            setSavedDistricts(res)
+        });
     }, [])
 
     return(

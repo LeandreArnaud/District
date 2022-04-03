@@ -10,7 +10,7 @@ const MyStack = ()=>{
     <Stack.Navigator>
       <Stack.Screen name="Homepage" component={Homepage} options={{headerShown: false}}/>
       <Stack.Screen name="MapGuesser" component={MapGuesser} />
-      <Stack.Screen name="DistrictCreator" component={DistrictCreator} />
+      <Stack.Screen name="DistrictCreator" component={DistrictCreator} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 }

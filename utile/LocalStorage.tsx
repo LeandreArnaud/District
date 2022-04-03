@@ -1,19 +1,39 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type districts = {
-    shortname: string,
-    cities: {
-        name: string,
-        CP: string,
-    }[]
-}[]
+interface city {
+  COM: string;
+  CP: string;
+  COM_NORM: string;
+};
 
-export const storeDistricts = async (value: districts) => {
+type district = {
+  name: string;
+  centerLat: number;
+  centerLon: number;
+  cities: city[];
+};
+type districts = district[]
+
+const storeDistricts = async (value: districts) => {
     try {
       await AsyncStorage.setItem('Districts', JSON.stringify(value))
     } catch (e) {
       console.log('error when saving district to local storage');
     }
+}
+
+export const addDistrict = async (value: district) => {
+  try {
+    const currentDistrict = await getDistricts()
+    if (currentDistrict){
+      await storeDistricts([...currentDistrict, value])
+    }
+    else {
+      await storeDistricts([value])
+    }
+  } catch (e) {
+    console.log('error when adding district to local storage');
+  }
 }
 
 export const getDistricts = async () => {

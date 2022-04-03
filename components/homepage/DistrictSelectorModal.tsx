@@ -3,18 +3,29 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native'
 import icons from '../../assets/icons/iconManager'
 import text from '../../assets/text/text-fr.json'
 
-type cityType = {name: string, CP: string}
-type districtType = {shortname: string, cities: cityType[]}
+interface city {
+    COM: string;
+    CP: string;
+    COM_NORM: string;
+};
+interface district {
+    name: string;
+    centerLat: number;
+    centerLon: number;
+    cities: city[];
+};
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts: districtType[]|undefined, opentool: () => void, navigation: any };
+type districts = district[]
+
+type DistrictSelectorModalProps = { hideModal: () => void, districts?: districts|undefined, opentool: () => void, navigation: any };
 
 export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool, navigation}) => {
 
     const maxCitiesDisplayed = 4;
 
-    const cityLine = (city: cityType) => (
+    const cityLine = (city: city) => (
         <View style={styles.districtCityContainer}>
-            <Text numberOfLines={1} style={styles.districtCityName}>{city.name}</Text>
+            <Text numberOfLines={1} style={styles.districtCityName}>{city.COM}</Text>
             <Text>{city.CP}</Text>
         </View>
     );
@@ -37,13 +48,13 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
 
                 {districts && districts.map(dis => 
                     <TouchableOpacity style={styles.districtCellContainer} onPress={opentool}>
-                        <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
+                        <Text style={styles.districtCellTitle}>{dis.name.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
                             {dis.cities.length <= maxCitiesDisplayed+1
                                 ? dis.cities.map(cit => cityLine(cit))
                                 : dis.cities
                                     .slice(0, maxCitiesDisplayed)
-                                    .concat([{name: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: ""}])
+                                    .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: ""}])
                                     .map(cit => cityLine(cit))
                             }
                         </View>

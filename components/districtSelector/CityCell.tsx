@@ -7,9 +7,9 @@ interface city {
     CP: string;
     COM_NORM: string;
 };
-type CityCellProps = { city: city, onRemove: () => void };
+type CityCellProps = { city: city, onRemove: () => void, add?: boolean };
 
-export const CityCell: React.FC<CityCellProps> = ({ city, onRemove }) => {
+export const CityCell: React.FC<CityCellProps> = ({ city, onRemove, add }) => {
     return(
         <View style={styles.cityCell} key={city.COM}>
             <View style={styles.cityCellText}>
@@ -17,7 +17,7 @@ export const CityCell: React.FC<CityCellProps> = ({ city, onRemove }) => {
                 <Text>{city.COM_NORM}</Text>
             </View>
             <TouchableOpacity onPress={onRemove}>
-                <Text>suppr</Text>
+                <Text>{add ? 'add' : 'suppr'}</Text>
             </TouchableOpacity>
         </View>
     );
