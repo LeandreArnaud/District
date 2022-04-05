@@ -14,6 +14,14 @@ type district = {
 };
 type districts = district[]
 
+export const resetDistricts = async () => {
+  try {
+    await AsyncStorage.removeItem('Districts')
+  } catch (e) {
+    console.log('error when reseting district local storage');
+  }
+}
+
 const storeDistricts = async (value: districts) => {
     try {
       await AsyncStorage.setItem('Districts', JSON.stringify(value))

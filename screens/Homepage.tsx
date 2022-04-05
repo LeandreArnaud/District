@@ -37,7 +37,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
 
     return(
         <View style={styles.mainContainer}>
-            <HomepageHeader />
+            <HomepageHeader onSettings={() => navigation.navigate("Settings")} />
 
             <View style={styles.toolsContainer}>
             {text.homepage.tools.map(tool => 
