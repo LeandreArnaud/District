@@ -43,7 +43,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
 
             <View style={styles.toolsContainer}>
             {text.homepage.tools.map(tool => 
-                <ToolCell tool={tool} onPress={() => {
+                <ToolCell tool={tool} key={tool.title} onPress={() => {
                     setToolToOpen(tool.pushingPage)
                     setDistrictSelectionModalEnable(true)
                 }}/>

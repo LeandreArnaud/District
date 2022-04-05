@@ -85,7 +85,7 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
                         <View style={styles.citiesListContainer}>
                             <View style={styles.citiesList}>
                                 {district?.cities?.map(city => 
-                                    <CityCell city={city} onRemove={() => handleRemovesCity(city)}/>
+                                    <CityCell key={`${city.COM_NORM}-${city.CP}`} city={city} onRemove={() => handleRemovesCity(city)}/>
                                 )}
                             </View>
                             <TouchableOpacity onPress={() => setAddCityModal(true)}>

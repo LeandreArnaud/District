@@ -47,7 +47,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                 </View>
 
                 {districts && districts.map(dis => 
-                    <TouchableOpacity style={styles.districtCellContainer} onPress={opentool}>
+                    <TouchableOpacity style={styles.districtCellContainer} onPress={opentool} key={`${dis.shortname}-${dis.centerLat}`}>
                         <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
                             {dis.cities.length <= maxCitiesDisplayed+1
