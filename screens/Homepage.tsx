@@ -12,7 +12,7 @@ interface city {
     COM_NORM: string;
 };
 interface district {
-    name: string;
+    shortname: string;
     centerLat: number;
     centerLon: number;
     cities: city[];

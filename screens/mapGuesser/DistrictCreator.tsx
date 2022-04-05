@@ -13,14 +13,14 @@ interface city {
     COM_NORM: string;
 };
 interface district {
-    name: string;
+    shortname: string;
     centerLat: number;
     centerLon: number;
     cities: city[];
 };
 
 const initialDistrict = {
-    name: "",
+    shortname: "",
     centerLat: 0,
     centerLon: 0,
     cities: []
@@ -58,7 +58,7 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
     const [availablecities, setAvailablecities] = useState<Array<city>>(exCities);
 
     const handleTitleChange = (text: string) => {
-        setDistrict({...district, name: text.toUpperCase()});
+        setDistrict({...district, shortname: text.toUpperCase()});
     };
     const handleRemovesCity = (city:city) => {
         setDistrict({...district, cities: district.cities.filter(ci => ci.COM !== city.COM || ci.CP !== city.CP)})
@@ -73,7 +73,7 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
         addDistrict(district).then(() => navigation.navigate("Homepage"))
     }
     useEffect(() => {
-        if (district.name.length && district.cities.length) {
+        if (district.shortname.length && district.cities.length) {
             setDistrictValidity(true)
         }
         else {
@@ -96,7 +96,7 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
                         onChangeText={handleTitleChange} 
                         placeholder='Ex: MLB'
                         style={styles.textInput}
-                        value={district?.name}
+                        value={district?.shortname}
                         maxLength={3}
                     />
                     <Text>Communes :</Text>

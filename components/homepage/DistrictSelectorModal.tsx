@@ -9,7 +9,7 @@ interface city {
     COM_NORM: string;
 };
 interface district {
-    name: string;
+    shortname: string;
     centerLat: number;
     centerLon: number;
     cities: city[];
@@ -48,7 +48,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
 
                 {districts && districts.map(dis => 
                     <TouchableOpacity style={styles.districtCellContainer} onPress={opentool}>
-                        <Text style={styles.districtCellTitle}>{dis.name.toUpperCase().slice(0,3)}</Text>
+                        <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
                             {dis.cities.length <= maxCitiesDisplayed+1
                                 ? dis.cities.map(cit => cityLine(cit))
