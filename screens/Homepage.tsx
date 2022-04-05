@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import text from '../assets/text/text-fr.json'
 import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal';
 import HomepageHeader from '../components/homepage/HomepageHeader';
@@ -30,9 +30,11 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
     const openTool = () => navigation.navigate(toolToOpen);
 
     useEffect(()=>{
-        getDistricts().then(res => {
-            setSavedDistricts(res)
-        });
+        navigation.addListener('focus', () => {
+            getDistricts().then(res => {
+                setSavedDistricts(res)
+            });
+        })
     }, [])
 
     return(
