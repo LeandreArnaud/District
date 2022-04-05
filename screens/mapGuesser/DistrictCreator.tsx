@@ -26,36 +26,13 @@ const initialDistrict = {
     cities: []
 };
 
-const exCities = [
-    {
-        COM: "rambouillet",
-        CP: "78120",
-        COM_NORM: "Rambouillet",
-    },
-    {
-        COM: "clairfontaine",
-        CP: "78120",
-        COM_NORM: "ClairFontaine",
-    },
-    {
-        COM: "trappes",
-        CP: "78190",
-        COM_NORM: "Trappes",
-    },
-    {
-        COM: "villecorse",
-        CP: "2B190",
-        COM_NORM: "VilleCorse",
-    },
-];
-
 type DistrictCreatorProps = { navigation: any };
 
 export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) => {
     const [district, setDistrict] = useState<district>(initialDistrict);
     const [districtValidity, setDistrictValidity] = useState<boolean>(false);
     const [addCityModal, setAddCityModal] = useState<boolean>(false);
-    const [availablecities, setAvailablecities] = useState<Array<city>>(exCities);
+    const [availablecities, setAvailablecities] = useState<Array<city>>([]);
 
     const handleTitleChange = (text: string) => {
         setDistrict({...district, shortname: text.toUpperCase()});
@@ -81,37 +58,43 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
         }
     }, [district])
 
+    useEffect(() => {
+        getComs().then(res => setAvailablecities(res.communes))
+    }, [])
+
     return(
         <View style={styles.mainContainer}>
             {addCityModal && <CityAdderModal cities={availablecities} onClose={() => setAddCityModal(false)} onAdd={handleAddCity} />}
             
-            <View style={styles.scrollableContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Nouveau district</Text>
-                </View>
+            <ScrollView style={styles.scrollView}>
+                <View style={styles.scrollableContainer}>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.titleText}>Nouveau district</Text>
+                    </View>
 
-                <View style={styles.formContainer}>
-                    <Text>Nom du district (3 lettres max) :</Text>
-                    <TextInput 
-                        onChangeText={handleTitleChange} 
-                        placeholder='Ex: MLB'
-                        style={styles.textInput}
-                        value={district?.shortname}
-                        maxLength={3}
-                    />
-                    <Text>Communes :</Text>
-                    <View style={styles.citiesListContainer}>
-                        <View style={styles.citiesList}>
-                            {district?.cities?.map(city => 
-                                <CityCell city={city} onRemove={() => handleRemovesCity(city)}/>
-                            )}
+                    <View style={styles.formContainer}>
+                        <Text>Nom du district (3 lettres max) :</Text>
+                        <TextInput 
+                            onChangeText={handleTitleChange} 
+                            placeholder='Ex: MLB'
+                            style={styles.textInput}
+                            value={district?.shortname}
+                            maxLength={3}
+                        />
+                        <Text>Communes :</Text>
+                        <View style={styles.citiesListContainer}>
+                            <View style={styles.citiesList}>
+                                {district?.cities?.map(city => 
+                                    <CityCell city={city} onRemove={() => handleRemovesCity(city)}/>
+                                )}
+                            </View>
+                            <TouchableOpacity onPress={() => setAddCityModal(true)}>
+                                <Text>add</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity onPress={() => setAddCityModal(true)}>
-                            <Text>add</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
             
             <TouchableOpacity 
             style={[styles.submitContainer, districtValidity && styles.submitContainerValid]} 
@@ -130,6 +113,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         width: "100%",
         height: "100%",
+    },
+    scrollView: {
+        width: "100%",
+        flex: 1,
     },
     scrollableContainer: {
         flex: 0,
@@ -154,7 +141,7 @@ const styles = StyleSheet.create({
     formContainer: {
         paddingHorizontal: 10,
         width: "100%",
-        height: 300,
+        marginBottom: 60,
     },
     textInput:{
         width: "100%",
@@ -185,6 +172,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#DAAC08",
     },
     submitContainer:{
+        marginTop: 10,
         marginBottom: 40,
         paddingHorizontal: 15,
         paddingVertical: 10,

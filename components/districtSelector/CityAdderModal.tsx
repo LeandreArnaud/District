@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, Image, TextInput} from 'react-native'
+import {StyleSheet, View, Text, TouchableOpacity, Image, TextInput, ScrollView} from 'react-native'
 import icons from '../../assets/icons/iconManager';
 import CityCell from './CityCell';
 
@@ -28,14 +28,16 @@ export const CityAdderModal: React.FC<CityAdderModalProps> = ({ cities, onClose,
                     style={styles.searchTextInput}
                 />
                 <Text>Ajouter la ville de votre choix</Text>
-                <View style={styles.citiesContainer}>
-                    {displayedCities.map(city => <CityCell city={city} add
-                        onRemove={() => {
-                            onAdd(city)
-                            onClose()
-                        }} 
-                    />)}
-                </View>
+                <ScrollView style={styles.scrollContainer}>
+                    <View style={styles.citiesContainer}>
+                        {displayedCities.map(city => <CityCell city={city} add
+                            onRemove={() => {
+                                onAdd(city)
+                                onClose()
+                            }} 
+                        />)}
+                    </View>
+                </ScrollView>
             </View>
         </View>
     );
@@ -78,12 +80,16 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 20,
     },
+    scrollContainer: {
+        width: "100%",
+        flex: 1,
+    },
     citiesContainer: {
         backgroundColor: "#E0E0E0",
         width: "100%",
         paddingHorizontal: 3,
         paddingBottom: 5,
-        flex: 0,
+        flex: 1,
         alignItems: "center",
     }
 });
