@@ -4,6 +4,8 @@ interface city {
   COM: string;
   CP: string;
   COM_NORM: string;
+  LAT: number;
+  LON: number;
 };
 
 type district = {

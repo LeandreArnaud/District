@@ -6,6 +6,8 @@ interface city {
     COM: string;
     CP: string;
     COM_NORM: string;
+    LAT: number;
+    LON: number;
 };
 type CityCellProps = { city: city, onRemove: () => void, add?: boolean };
 

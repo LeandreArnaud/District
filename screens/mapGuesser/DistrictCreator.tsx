@@ -7,11 +7,13 @@ import { CityCell } from '../../components/districtSelector/CityCell';
 import { CityAdderModal } from '../../components/districtSelector/CityAdderModal';
 import { addDistrict } from '../../utile/LocalStorage';
 import icons from '../../assets/icons/iconManager';
-
+import { mean } from 'lodash';
 interface city {
     COM: string;
     CP: string;
     COM_NORM: string;
+    LAT: number;
+    LON: number;
 };
 interface district {
     shortname: string;
@@ -47,8 +49,13 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
         setAvailablecities(availablecities.filter(ci => ci.COM_NORM !== city.COM_NORM || ci.CP !== city.CP ))
     }
     const handleCreateDistrict = () => {
-        // TODO: search for lat lon
-        addDistrict(district).then(() => navigation.navigate("Homepage"))
+        const centerLat = mean(district.cities.map(ci => ci.LAT));
+        const centerLon = mean(district.cities.map(ci => ci.LON));
+        addDistrict({
+            ...district, 
+            centerLat: centerLat, 
+            centerLon: centerLon
+        }).then(() => navigation.navigate("Homepage"))
     }
     useEffect(() => {
         if (district.shortname.length && district.cities.length) {

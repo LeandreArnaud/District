@@ -10,6 +10,8 @@ interface city {
     COM: string;
     CP: string;
     COM_NORM: string;
+    LAT: number;
+    LON: number;
 };
 interface district {
     shortname: string;

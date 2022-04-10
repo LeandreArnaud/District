@@ -7,6 +7,8 @@ interface city {
     COM: string;
     CP: string;
     COM_NORM: string;
+    LAT: number;
+    LON: number;
 };
 interface district {
     shortname: string;
@@ -54,7 +56,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                                 ? dis.cities.map(cit => cityLine(cit))
                                 : dis.cities
                                     .slice(0, maxCitiesDisplayed)
-                                    .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: ""}])
+                                    .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: "", LAT: 0, LON: 0}])
                                     .map(cit => cityLine(cit))
                             }
                         </View>
