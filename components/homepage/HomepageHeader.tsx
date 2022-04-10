@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     },
     paramsIcon: {
         width: "100%",
-        color: "#F0F0F0",
         opacity: 0.4,
         resizeMode: "center",
     }
