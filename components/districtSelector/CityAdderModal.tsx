@@ -16,7 +16,7 @@ export const CityAdderModal: React.FC<CityAdderModalProps> = ({ cities, onClose,
     const [displayedCities, setDisplayedCities] = useState<Array<city>>(cities);
 
     const handleCitySearch = (search: string) => {
-        setDisplayedCities(cities.filter(ci => ci.COM.includes(search.toLowerCase()) || ci.CP.includes(search.toUpperCase())))
+        setDisplayedCities(cities.filter(ci => ci.COM_NORM.includes(search.toLowerCase()) || ci.CP.includes(search.toUpperCase())))
     }
 
     return(
