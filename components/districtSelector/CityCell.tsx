@@ -17,7 +17,19 @@ export const CityCell: React.FC<CityCellProps> = ({ city, onRemove, add }) => {
                 <Text>{city.COM_NORM}</Text>
             </View>
             <TouchableOpacity onPress={onRemove}>
-                <Text>{add ? 'add' : 'suppr'}</Text>
+                {add ? (
+                    <Image
+                        style={styles.addIcon}
+                        // @ts-ignore
+                        source={icons['add']}
+                    />
+                ) : (
+                    <Image
+                        style={styles.removeIcon}
+                        // @ts-ignore
+                        source={icons['remove']}
+                    />
+                )}
             </TouchableOpacity>
         </View>
     );
@@ -25,7 +37,7 @@ export const CityCell: React.FC<CityCellProps> = ({ city, onRemove, add }) => {
 
 const styles = StyleSheet.create({
     cityCell: {
-        height: 30,
+        height: 40,
         marginTop: 5,
         paddingHorizontal: 10,
         backgroundColor: "#F0F0F0",
@@ -40,6 +52,14 @@ const styles = StyleSheet.create({
     cityCellText: {
         flex:  0,
         flexDirection: "row",
+    },
+    addIcon: {
+        width: 30,
+        height: 30,
+    },
+    removeIcon: {
+        width: 20,
+        height: 20,
     },
 });
 

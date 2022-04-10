@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, ColorPropType} from 'react-native'
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, ColorPropType, Image} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
 import { getComs } from '../../API/mvp-district-API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CityCell } from '../../components/districtSelector/CityCell';
 import { CityAdderModal } from '../../components/districtSelector/CityAdderModal';
 import { addDistrict } from '../../utile/LocalStorage';
+import icons from '../../assets/icons/iconManager';
 
 interface city {
     COM: string;
@@ -89,7 +90,11 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
                                 )}
                             </View>
                             <TouchableOpacity onPress={() => setAddCityModal(true)}>
-                                <Text>add</Text>
+                                <Image
+                                    style={styles.addIcon}
+                                    // @ts-ignore
+                                    source={icons['add']}
+                                />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -167,6 +172,11 @@ const styles = StyleSheet.create({
         paddingBottom: 60,
         flex: 0,
         alignItems: "center",
+    },
+    addIcon: {
+        width: 30,
+        height: 30,
+        marginBottom: 5,
     },
     submitContainerValid: {
         backgroundColor: "#DAAC08",
