@@ -19,7 +19,7 @@ interface district {
 
 type districts = district[]
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts?: districts|undefined, opentool: () => void, navigation: any };
+type DistrictSelectorModalProps = { hideModal: () => void, districts?: districts|undefined, opentool: (district: district) => void, navigation: any };
 
 export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool, navigation}) => {
 
@@ -49,7 +49,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                 </View>
 
                 {districts && districts.map(dis => 
-                    <TouchableOpacity style={styles.districtCellContainer} onPress={opentool} key={`${dis.shortname}-${dis.centerLat}`}>
+                    <TouchableOpacity style={styles.districtCellContainer} onPress={() => opentool(dis)} key={`${dis.shortname}-${dis.centerLat}`}>
                         <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
                         <View style={styles.districtCitiesContainer}>
                             {dis.cities.length <= maxCitiesDisplayed+1

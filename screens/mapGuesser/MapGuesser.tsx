@@ -21,9 +21,25 @@ interface cursor {
     longitudeDelta: number;
 }
 
+interface city {
+    COM: string;
+    CP: string;
+    COM_NORM: string;
+    LAT: number;
+    LON: number;
+};
+interface district {
+    shortname: string;
+    centerLat: number;
+    centerLon: number;
+    cities: city[];
+};
+
+type MapGuesserProps = { route: any, navigation: any };
 
 // screen where you try to guess the location of an adress
-export const MapGuesser: React.FC = ({}) => {
+export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
+    const district: district = route.params.district;
     const [adressToGuess, setAdressToGuess]: [adress, Dispatch<SetStateAction<adress>>] = React.useState();
     const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState();
     const [ticketVisible, setTicketVisible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(true);
