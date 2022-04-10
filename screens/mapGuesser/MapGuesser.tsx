@@ -40,8 +40,14 @@ type MapGuesserProps = { route: any, navigation: any };
 // screen where you try to guess the location of an adress
 export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
     const district: district = route.params.district;
+    const initialCursor = {
+        latitude: district.centerLat, 
+        longitude: district.centerLon,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+    };
     const [adressToGuess, setAdressToGuess]: [adress, Dispatch<SetStateAction<adress>>] = React.useState();
-    const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState();
+    const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState(initialCursor);
     const [ticketVisible, setTicketVisible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(true);
     const [resultVisible, setResult_visible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(false);
 
@@ -55,9 +61,11 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
     };
 
     const generateRandomAdress = () => {
-        getRandomAdress("'trappes'").then(data => 
+        const cities =  district.cities.map(ci => `'${ci.COM_NORM}'`).toString()
+        getRandomAdress(cities).then(data => 
             setAdressToGuess(data)
         );
+        setCursor(initialCursor);
     }
 
     // generates random adress when component is mounted
@@ -129,7 +137,7 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
             <MapView 
                 // @ts-ignore
                 style={styles.map} 
-                region={cursor}
+                initialRegion={initialCursor}
                 onRegionChangeComplete={(region) => setCursor(region)}
                 customMapStyle={mapStyle}
             >   
