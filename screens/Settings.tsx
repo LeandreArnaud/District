@@ -35,10 +35,10 @@ export const Settings: React.FC = () => {
  
     return(
         <View style={styles.mainContainer}>
-            <TouchableOpacity onPress={handleResetDistrict} disabled={!districts}>
+            <TouchableOpacity onPress={handleResetDistrict} disabled={!districts} style={styles.cell}>
                 {districts 
-                    ? <Text> effacer les districts </Text>
-                    : <Text> Aucun district </Text>
+                    ? <Text style={styles.enable}> effacer les districts </Text>
+                    : <Text style={styles.disable}> Aucun district </Text>
                 }
             </TouchableOpacity>
         </View>
@@ -51,7 +51,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 40,
+        paddingTop: 20,
+        paddingHorizontal: 10,
+    },
+    cell: {
+        width: "100%",
+        height: 50,
+        flex: 0,
+        justifyContent: "center",
+        alignItems: 'center',
+        borderRadius: 8,
+        backgroundColor: "#D0D0D0"
+    },
+    enable: {
+        color: "#000000"
+    },
+    disable: {
+        color: "#808080"
     },
 });
 
