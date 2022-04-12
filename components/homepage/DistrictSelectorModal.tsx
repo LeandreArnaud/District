@@ -1,8 +1,10 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, Image, TouchableOpacity, Dimensions} from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 import icons from '../../assets/icons/iconManager'
 import text from '../../assets/text/text-fr.json'
 
+const { height } = Dimensions.get('window');
 interface city {
     COM: string;
     CP: string;
@@ -48,20 +50,22 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
                     </View>
                 </View>
 
-                {districts && districts.map(dis => 
-                    <TouchableOpacity style={styles.districtCellContainer} onPress={() => opentool(dis)} key={`${dis.shortname}-${dis.centerLat}`}>
-                        <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
-                        <View style={styles.districtCitiesContainer}>
-                            {dis.cities.length <= maxCitiesDisplayed+1
-                                ? dis.cities.map(cit => cityLine(cit))
-                                : dis.cities
-                                    .slice(0, maxCitiesDisplayed)
-                                    .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: "", LAT: 0, LON: 0}])
-                                    .map(cit => cityLine(cit))
-                            }
-                        </View>
-                    </TouchableOpacity>
-                )}
+                <ScrollView style={styles.scrollView}>
+                    {districts && districts.map(dis => 
+                        <TouchableOpacity style={styles.districtCellContainer} onPress={() => opentool(dis)} key={`${dis.shortname}-${dis.centerLat}`}>
+                            <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
+                            <View style={styles.districtCitiesContainer}>
+                                {dis.cities.length <= maxCitiesDisplayed+1
+                                    ? dis.cities.map(cit => cityLine(cit))
+                                    : dis.cities
+                                        .slice(0, maxCitiesDisplayed)
+                                        .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: "", LAT: 0, LON: 0}])
+                                        .map(cit => cityLine(cit))
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                </ScrollView>
 
                 <View style={styles.addButtonContainer}>
                     <TouchableOpacity style={styles.addButtonTouchable} onPress={() => navigation.navigate("DistrictCreator")}>
@@ -85,8 +89,11 @@ const styles = StyleSheet.create({
         height: "100%",
         backgroundColor: "#000000",
         opacity: 0.4,
+        position: "absolute",
+        top: 0,
     },
     modaleContainter: {
+        maxHeight: height,
         backgroundColor: "#FFFFFF",
         position: "absolute",
         bottom: 0,
@@ -95,7 +102,9 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 40,
         paddingTop: 20,
         paddingBottom: 70,
-        paddingHorizontal: 10,
+    },
+    scrollView: {
+        width: '100%',
     },
     modaleTitleContainter: {
         flex: 0,
@@ -136,6 +145,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000000",
         backgroundColor: "#FFFFFF",
         marginBottom: 10,
+        marginHorizontal: 10,
     },
     districtCellTitle: {
         textAlign: "center",
