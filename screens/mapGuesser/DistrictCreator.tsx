@@ -37,8 +37,8 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
     const [addCityModal, setAddCityModal] = useState<boolean>(false);
     const [availablecities, setAvailablecities] = useState<Array<city>>([]);
 
-    const handleTitleChange = (text: string) => {
-        setDistrict({...district, shortname: text.toUpperCase()});
+    const handleTitleChange =  (text: string) => {
+        setDistrict({...district, shortname: text});
     };
     const handleRemovesCity = (city:city) => {
         setDistrict({...district, cities: district.cities.filter(ci => ci.COM !== city.COM || ci.CP !== city.CP)})
@@ -82,8 +82,9 @@ export const DistrictCreator: React.FC<DistrictCreatorProps> = ({ navigation }) 
 
                     <View style={styles.formContainer}>
                         <Text>Nom du district (3 lettres max) :</Text>
-                        <TextInput 
-                            onChangeText={handleTitleChange} 
+                        <TextInput
+                            onChangeText={handleTitleChange}
+                            autoCapitalize={'characters'}
                             placeholder='Ex: MLB'
                             style={styles.textInput}
                             value={district?.shortname}
