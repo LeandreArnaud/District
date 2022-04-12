@@ -28,7 +28,7 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
     const maxCitiesDisplayed = 4;
 
     const cityLine = (city: city) => (
-        <View style={styles.districtCityContainer}>
+        <View style={styles.districtCityContainer} key={`${city.COM}-${city.CP}`}>
             <Text numberOfLines={1} style={styles.districtCityName}>{city.COM}</Text>
             <Text>{city.CP}</Text>
         </View>
