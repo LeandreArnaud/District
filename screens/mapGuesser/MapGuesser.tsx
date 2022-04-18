@@ -75,34 +75,20 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
 
     return(
         <View style={styles.container}>
-        
-        {(resultVisible && adressToGuess?.id && cursor?.latitude) && (
-            <MapGuesserResults
-                adress={adressToGuess}
-                cursor={cursor}
-                closeModalFunction={() => toggleResultVisibility()}/>
-        )}
-        
-        {adressToGuess?.id && (
-            <Modal
-            transparent={true}
-            animationType='fade'
-            visible={ticketVisible}>
-                <View 
-                style={styles.centeredView}>
-                    <View 
-                    style={styles.ticketContainer}>
-                        <View 
-                        style={styles.ticket}>
+            
+            {(resultVisible && adressToGuess?.id && cursor?.latitude) && (
+                <MapGuesserResults
+                    adress={adressToGuess}
+                    cursor={cursor}
+                    closeModalFunction={() => toggleResultVisibility()}/>
+            )}
+            
+            {adressToGuess?.id && ticketVisible && (
 
-                            <TouchableOpacity 
-                                style={styles.ticketButtonContainer}
-                                onPress={() => setTicketVisible(false)}>
-                                <Text style={styles.ticketButtonIcon}>
-                                    GOT IT !
-                                </Text>
-                            </TouchableOpacity>
-
+                <View style={styles.modalContainer} >
+                    <TouchableOpacity style={styles.blurredBackground} onPress={() => setTicketVisible(false)} />
+                    <View style={styles.ticketContainer} >
+                        <View style={styles.ticket} >
                             <View
                             style={styles.ticketHole}>
                                 {[...Array(20)].map((e, i) => <View style={styles.circle} key={i}></View>)}
@@ -115,8 +101,6 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                                     ADRESSE: {adressToGuess.num} {adressToGuess.rue} {"\n"}
                                     COMMUNE: {adressToGuess.cp} {adressToGuess.com} {"\n"}
                                 </Text>
-                                <Text>lat: {cursor?.latitude? cursor.latitude : "no"}</Text>
-                                <Text>rue: {adressToGuess?.rue? adressToGuess.rue : "no"}</Text>
                             </View>
                             
                             <View
@@ -126,106 +110,64 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                         </View>
                     </View>
                 </View>
-            </Modal>
-        )}
-        
+            )}
+            
 
-        <View style={styles.mapContainer}>
-            <MapView 
-                // @ts-ignore
-                style={styles.map} 
-                initialRegion={initialCursor}
-                onRegionChangeComplete={(region) => setCursor(region)}
-                customMapStyle={mapStyle}
-            >   
-            </MapView>
-            <View pointerEvents="none" style={styles.staticMarkerContainer}>
-                <Image
-                    style={styles.truckPointeur}
-                    source={icons["firetruck"]}
-                />
-            </View>
-            <View 
-                style={styles.ticketButtonContainer}>
-                <TouchableOpacity onPress={() => navigation.goBack()} >
+            <View style={styles.mapContainer}>
+                <MapView 
+                    // @ts-ignore
+                    style={styles.map} 
+                    initialRegion={initialCursor}
+                    onRegionChangeComplete={(region) => setCursor(region)}
+                    customMapStyle={mapStyle}
+                >   
+                </MapView>
+                <View pointerEvents="none" style={styles.staticMarkerContainer}>
                     <Image
-                        style={styles.returnChevronIcon}
-                        source={icons["chevron"]}
+                        style={styles.truckPointeur}
+                        source={icons["firetruck"]}
                     />
-                </TouchableOpacity>
-                
-                <TouchableOpacity onPress={() => setTicketVisible(true)} >
-                    <Image
-                        style={styles.ticketButtonIcon}
-                        source={icons["document"]}
-                    />
-                </TouchableOpacity>
+                </View>
+                <View 
+                    style={styles.topButtonContainer}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} >
+                        <Image
+                            style={styles.returnChevronIcon}
+                            source={icons["chevron"]}
+                        />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={() => setTicketVisible(true)} >
+                        <Image
+                            style={styles.topButtonIcon}
+                            source={icons["document"]}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View 
+                    pointerEvents="box-none"
+                    style={styles.sendButton}>
+                    <TouchableOpacity 
+                        style={styles.sendButtonContainer}
+                        onPress={() => toggleResultVisibility()}>
+                        <Image
+                            style={styles.sendButtonIcon}
+                            source={icons["check"]}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View 
-                pointerEvents="box-none"
-                style={styles.sendButton}>
-                <TouchableOpacity 
-                    style={styles.sendButtonContainer}
-                    onPress={() => toggleResultVisibility()}>
-                    <Image
-                        style={styles.sendButtonIcon}
-                        source={icons["check"]}
-                    />
-                </TouchableOpacity>
-            </View>
-        </View>
       </View>
     );
 };
 
 const styles = StyleSheet.create({
-    centeredView:{
-        flex: 1,
-        alignItems:'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(52, 52, 52, 0.8)'
-    },
-    ticketContainer:{
-        width: Dimensions.get('window').width*0.9,
-        height: Dimensions.get('window').height*0.5,
-    },
-    ticket:{
-        flex:1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#FEF9E7',
-        overflow: 'hidden'
-    },
-    ticketTextZone: {
-        //backgroundColor:'red',
-        width: Dimensions.get('window').width*0.7,
-    },
-    ticketText: {
-        textAlign:'center',
-        color: 'black',
-        fontFamily: 'monospace'
-    },
-    ticketHole:{
-        backgroundColor:'#FFFFFF',
-        paddingHorizontal: 10,
-        borderStyle: 'dashed',
-        borderWidth: 1,
-        borderRadius: 1
-    },
-    circle:{
-        width: 10,
-        height: 10,
-        borderRadius: 10 / 2,
-        backgroundColor: "black",
-        marginVertical: 10
-    },
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        },
+    },
     textContainer: {
         backgroundColor: 'green',
         flex: 1,
@@ -276,7 +218,7 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
     },
-    ticketButtonContainer:{
+    topButtonContainer:{
         width: '100%',
         position: 'absolute',
         top: 40,
@@ -285,7 +227,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
     },
-    ticketButtonIcon: {
+    topButtonIcon: {
         height: 30,
         width: 30,
     },
@@ -293,6 +235,60 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         transform: [{rotate: '180deg'}]
+    },
+    modalContainer: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        zIndex: 1,
+        flex: 0,
+        alignItems:'center',
+        justifyContent: 'center',
+    },
+    blurredBackground: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        top: 0,
+    },
+    centeredView:{
+    },
+    ticketContainer:{
+        width: Dimensions.get('window').width*0.9,
+        height: Dimensions.get('window').height*0.5,
+    },
+    ticket:{
+        flex:1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FEF9E7',
+        overflow: 'hidden',
+        borderRadius: 20,
+    },
+    ticketTextZone: {
+        width: Dimensions.get('window').width*0.7,
+    },
+    ticketText: {
+        textAlign:'center',
+        color: 'black',
+        fontFamily: 'monospace'
+    },
+    ticketHole:{
+        backgroundColor:'#FFFFFF',
+        paddingHorizontal: 10,
+        borderStyle: 'dashed',
+        borderWidth: 1,
+        borderRadius: 1
+    },
+    circle:{
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        backgroundColor: "black",
+        marginVertical: 10
     },
 });
 

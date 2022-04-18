@@ -8,4 +8,5 @@ export default {
     chevron: require('./chevron.png'),
     document: require('./document.png'),
     firetruck: require('./firetruck.png'),
+    close: require('./close.png'),
  }
