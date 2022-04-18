@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import MapView from 'react-native-maps';
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal} from 'react-native'
+import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, Image} from 'react-native'
 import {getRandomAdress} from '../../API/mvp-district-API'
 import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
-
+import icons from '../../assets/icons/iconManager';
 
 interface adress {
     id: string;
@@ -94,17 +94,14 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                     style={styles.ticketContainer}>
                         <View 
                         style={styles.ticket}>
-                            <View 
-                                pointerEvents="box-none"
-                                style={styles.ticketButton}>
-                                <TouchableOpacity 
-                                    style={styles.ticketButtonContainer}
-                                    onPress={() => setTicketVisible(false)}>
-                                    <Text style={styles.ticketButtonText}>
-                                        GOT IT !
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
+
+                            <TouchableOpacity 
+                                style={styles.ticketButtonContainer}
+                                onPress={() => setTicketVisible(false)}>
+                                <Text style={styles.ticketButtonIcon}>
+                                    GOT IT !
+                                </Text>
+                            </TouchableOpacity>
 
                             <View
                             style={styles.ticketHole}>
@@ -143,17 +140,25 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
             >   
             </MapView>
             <View pointerEvents="none" style={styles.staticMarkerContainer}>
-                <Text style={styles.textPointeur}>🚒</Text>
+                <Image
+                    style={styles.truckPointeur}
+                    source={icons["firetruck"]}
+                />
             </View>
             <View 
-                pointerEvents="box-none"
-                style={styles.ticketButton}>
-                <TouchableOpacity 
-                    style={styles.ticketButtonContainer}
-                    onPress={() => setTicketVisible(true)}>
-                    <Text style={styles.ticketButtonText}>
-                        WATCH TICKET
-                    </Text>
+                style={styles.ticketButtonContainer}>
+                <TouchableOpacity onPress={() => navigation.goBack()} >
+                    <Image
+                        style={styles.returnChevronIcon}
+                        source={icons["chevron"]}
+                    />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={() => setTicketVisible(true)} >
+                    <Image
+                        style={styles.ticketButtonIcon}
+                        source={icons["document"]}
+                    />
                 </TouchableOpacity>
             </View>
             <View 
@@ -162,9 +167,10 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                 <TouchableOpacity 
                     style={styles.sendButtonContainer}
                     onPress={() => toggleResultVisibility()}>
-                    <Text style={styles.sendButtonText}>
-                        SEND
-                    </Text>
+                    <Image
+                        style={styles.sendButtonIcon}
+                        source={icons["check"]}
+                    />
                 </TouchableOpacity>
             </View>
         </View>
@@ -228,8 +234,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     mapContainer: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height*0.95,
+        width: '100%',
+        height: '100%',
     },
     map: {
         width: '100%',
@@ -245,8 +251,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         backgroundColor: 'transparent',
     },
-    textPointeur: {
-        fontSize: 20
+    truckPointeur:{
+        width: 30,
+        height: 30,
     },
     sendButton: {
         position: 'absolute',
@@ -261,33 +268,31 @@ const styles = StyleSheet.create({
         marginRight: 20,   
     },
     sendButtonContainer:{
-        backgroundColor:'green',
+        backgroundColor: "#DAAC08",
         borderRadius: 40,
-        padding: 15
+        padding: 10
     },
-    sendButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    ticketButton: {
-        position: 'absolute',
-        top: 0, 
-        bottom: 0, 
-        left: 0, 
-        right: 0,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        backgroundColor: 'transparent',
-        marginTop: 10,   
+    sendButtonIcon: {
+        width: 25,
+        height: 25,
     },
     ticketButtonContainer:{
-        backgroundColor:'brown',
-        borderRadius: 40,
-        padding: 15
+        width: '100%',
+        position: 'absolute',
+        top: 40,
+        paddingHorizontal: 20,
+        flex: 0,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
     },
-    ticketButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
+    ticketButtonIcon: {
+        height: 30,
+        width: 30,
+    },
+    returnChevronIcon: {
+        height: 30,
+        width: 30,
+        transform: [{rotate: '180deg'}]
     },
 });
 

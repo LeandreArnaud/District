@@ -4,4 +4,8 @@ export default {
     dots: require('./dots.png'),
     add: require('./add.png'),
     remove: require('./remove.png'),
+    check: require('./check.png'),
+    chevron: require('./chevron.png'),
+    document: require('./document.png'),
+    firetruck: require('./firetruck.png'),
  }
