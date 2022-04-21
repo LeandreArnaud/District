@@ -20,5 +20,14 @@
             "more": "autres..."
         },
         "add": "Ajouter un district"
+    },
+    "geoguesser": {
+        "guesser":{
+            "ticket": {
+                "title": "INTERVENTION N°1234",
+                "adress": "ADRESSE: ",
+                "com": "COMMUNE: "
+            }
+        }
     }
 }

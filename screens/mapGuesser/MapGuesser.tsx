@@ -5,6 +5,7 @@ import {getRandomAdress} from '../../API/mvp-district-API'
 import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
 import icons from '../../assets/icons/iconManager';
+import text from '../../assets/text/text-fr.json'
 
 type adress = {
     id: string;
@@ -99,9 +100,9 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                             <View
                             style={styles.ticketTextZone}>
                                 <Text style={styles.ticketText}>
-                                    INTERVENTION N°1234{"\n"}{"\n"}{"\n"}
-                                    ADRESSE: {adressToGuess.num} {adressToGuess.rue} {"\n"}
-                                    COMMUNE: {adressToGuess.cp} {adressToGuess.com} {"\n"}
+                                    {`${text.geoguesser.guesser.ticket.title}\n\n\n`}
+                                    {`${text.geoguesser.guesser.ticket.adress}${adressToGuess.num} ${adressToGuess.rue}\n`}
+                                    {`${text.geoguesser.guesser.ticket.com}${adressToGuess.cp} ${adressToGuess.com}\n`}
                                 </Text>
                             </View>
                             
