@@ -1,19 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import MapView from 'react-native-maps';
 import {Marker, Polygon} from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Image} from 'react-native'
 import {getEvaluation} from '../../API/mvp-district-API'
+import icons from '../../assets/icons/iconManager';
 
-const guessedIcon = require('../../assets/fireTruckEmoji.png')
-const trueIcon = require('../../assets/fireGif.webp')
-
-
-interface results {
+type results = {
     latAdress: number;
     lonAdress: number;
     distance: number;
     score: number;
-}
+} | undefined;
 
 interface adress {
     id: string;
@@ -43,7 +40,7 @@ export const MapGuesserResults: React.FC<Props> = ({
     cursor,
     closeModalFunction,
 }) => {
-    const [results, setResults]: [results, Dispatch<SetStateAction<results>>] = React.useState(null);
+    const [results, setResults]: [results, Dispatch<SetStateAction<results>>] = React.useState();
 
     const evaluate = () => {
         getEvaluation({
@@ -60,122 +57,107 @@ export const MapGuesserResults: React.FC<Props> = ({
         });
     }
 
+    useEffect(() => {
+        evaluate()
+    }, [])
 
     return(
-        <Modal
-        transparent={true}
-        animationType='fade'
-        onShow={evaluate}>
-            <View 
-            style={styles.centeredView}>
-                <View style={styles.container}>
-                    <View style={styles.scoreContainer}>
-                        {results?.score!=null ?
-                            <Text style={styles.scoreText}>
-                                Your score is {Math.round(results.score*100)/100} !!{"\n"}
-                                (Distance is ({Math.round(results.distance)}m)
-                            </Text>
-                        :
-                            <ActivityIndicator
-                            color='#000000'
-                            size='large'>
-                            </ActivityIndicator>
-                        }
-                    </View>
-                    
-                    <View style={styles.mapContainer}>
-                        {results?.score==null ?
-                            <ActivityIndicator
-                            color='#000000'
-                            size='large'>
-                            </ActivityIndicator>
-                        :
-                            <MapView 
-                            style={styles.map} 
-                            region={{
-                                latitude: (cursor.latitude+results.latAdress)/2,
-                                longitude: (cursor.longitude+results.lonAdress)/2,
-                                latitudeDelta: ((cursor.latitude-results.latAdress)**2)**0.5+0.005,
-                                longitudeDelta: ((cursor.longitude-results.lonAdress)**2)**0.5+0.005,
-                                }}> 
-                                {/* guessed */}
-                                <Marker
-                                coordinate={{ latitude : cursor.latitude , longitude : cursor.longitude }}
-                                title={'guessed'}
-                                description={'descr'}>
-                                    <Image source={guessedIcon} style={{height: 25, width:25 }} />
-                                </Marker>
-                                {/* true */}
-                                <Marker
-                                coordinate={{ latitude : results.latAdress , longitude : results.lonAdress }}
-                                title={'true'}
-                                description={'descr'}>
-                                    <Image source={trueIcon} style={{height: 40, width:40 }} />
-                                </Marker>
+        <View style={styles.modalContainer}>
+            <View style={styles.mapContainer}>
+                {results?.score==null ?
+                    <ActivityIndicator
+                    color='#000000'
+                    size='large'>
+                    </ActivityIndicator>
+                :
+                    <MapView 
+                    style={styles.map} 
+                    region={{
+                        latitude: (cursor.latitude+results.latAdress)/2,
+                        longitude: (cursor.longitude+results.lonAdress)/2,
+                        latitudeDelta: ((cursor.latitude-results.latAdress)**2)**0.5+0.005,
+                        longitudeDelta: ((cursor.longitude-results.lonAdress)**2)**0.5+0.005,
+                        }}> 
+                        {/* guessed */}
+                        <Marker
+                        coordinate={{ latitude : cursor.latitude , longitude : cursor.longitude }}
+                        title={'guessed'}
+                        description={'descr'}>
+                            <Image
+                                style={styles.truckPointeur}
+                                source={icons["firetruck"]}
+                            />
+                        </Marker>
+                        {/* true */}
+                        <Marker
+                        coordinate={{ latitude : results.latAdress , longitude : results.lonAdress }}
+                        title={'true'}
+                        description={'descr'}>
+                            <Image
+                                style={styles.fireGifMarker}
+                                source={icons["fireGif"]}
+                            />
+                        </Marker>
 
-                                <Polygon
-                                coordinates={[
-                                    { latitude : cursor.latitude , longitude : cursor.longitude },
-                                    { latitude : results.latAdress , longitude : results.lonAdress }
-                                ]}>
-                                </Polygon>
-                            </MapView>
-                        }
-                    </View>
-
-                    <TouchableOpacity
-                    style={styles.closeButtonContainer}
-                    onPress={closeModalFunction}>
-                        <Text style={styles.closeButtonText}>CLOSE</Text>
-                    </TouchableOpacity>
-                </View>
+                        <Polygon
+                        coordinates={[
+                            { latitude : cursor.latitude , longitude : cursor.longitude },
+                            { latitude : results.latAdress , longitude : results.lonAdress }
+                        ]}>
+                        </Polygon>
+                    </MapView>
+                }
             </View>
-        </Modal>
+
+            <TouchableOpacity
+            style={styles.closeButtonContainer}
+            onPress={closeModalFunction}>
+                <Image
+                    style={styles.closeButtonIcon}
+                    source={icons["refresh"]}
+                />
+            </TouchableOpacity>
+
+        </View>
         
     );
 }
 
 const styles = StyleSheet.create({
-    centeredView:{
-        flex: 1,
-        alignItems:'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    },
-    container: {
-        flex: 1,
-        backgroundColor: 'rgba(52, 52, 52, 0.0)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        },
-    scoreContainer:{
-        backgroundColor: 'rgba('+255+', 0, 0, 1.0)',
-        width: Dimensions.get('window').width*0.9,
-        alignItems: 'center',
-        paddingVertical:10
-    },
-    scoreText:{
-        color:'white',
-        fontWeight:'bold',
+    modalContainer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 1,
     },
     mapContainer: {
-        width: Dimensions.get('window').width*0.9,
-        height: Dimensions.get('window').height*0.7,
+        width: '100%',
+        height: '100%',
     },
     map: {
         width: '100%',
         height: '100%',
         },
     closeButtonContainer:{
-        backgroundColor:'green',
+        position: 'absolute',
+        bottom: 30, 
+        right: 20,  
+        backgroundColor: "#DAAC08",
         borderRadius: 40,
-        padding: 15,
-        marginTop: 10
+        padding: 10
     },
-    closeButtonText:{
-        fontWeight:'bold',
-        color:'white'
-    }
+    closeButtonIcon: {
+        width: 25,
+        height: 25,
+    },
+    truckPointeur:{
+        width: 25,
+        height: 25,
+    },
+    fireGifMarker:{
+        width: 40,
+        height: 40,
+    },
 });
 
 

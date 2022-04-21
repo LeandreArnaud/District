@@ -9,4 +9,6 @@ export default {
     document: require('./document.png'),
     firetruck: require('./firetruck.png'),
     close: require('./close.png'),
+    refresh: require('./refresh.png'),
+    fireGif: require('./fireGif.webp'),
  }

@@ -6,13 +6,13 @@ import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
 import icons from '../../assets/icons/iconManager';
 
-interface adress {
+type adress = {
     id: string;
     num: string;
     rue: string;
     cp: string;
     com: string;
-};
+} | undefined;
 
 interface cursor {
     latitude: number;
@@ -48,7 +48,9 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
     };
     const [adressToGuess, setAdressToGuess]: [adress, Dispatch<SetStateAction<adress>>] = React.useState();
     const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState(initialCursor);
+    // @ts-ignore
     const [ticketVisible, setTicketVisible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(true);
+    // @ts-ignore
     const [resultVisible, setResult_visible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(false);
 
 
@@ -144,18 +146,15 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                         />
                     </TouchableOpacity>
                 </View>
-                <View 
-                    pointerEvents="box-none"
-                    style={styles.sendButton}>
-                    <TouchableOpacity 
-                        style={styles.sendButtonContainer}
-                        onPress={() => toggleResultVisibility()}>
-                        <Image
-                            style={styles.sendButtonIcon}
-                            source={icons["check"]}
-                        />
-                    </TouchableOpacity>
-                </View>
+
+                <TouchableOpacity 
+                    style={styles.sendButtonContainer}
+                    onPress={() => toggleResultVisibility()}>
+                    <Image
+                        style={styles.sendButtonIcon}
+                        source={icons["check"]}
+                    />
+                </TouchableOpacity>
             </View>
       </View>
     );
@@ -197,19 +196,10 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
-    sendButton: {
-        position: 'absolute',
-        top: 0, 
-        bottom: 0, 
-        left: 0, 
-        right: 0,
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        backgroundColor: 'transparent',
-        marginBottom: 30,
-        marginRight: 20,   
-    },
     sendButtonContainer:{
+        position: 'absolute',
+        bottom: 30, 
+        right: 20,  
         backgroundColor: "#DAAC08",
         borderRadius: 40,
         padding: 10
