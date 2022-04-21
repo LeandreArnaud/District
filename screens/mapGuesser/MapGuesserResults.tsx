@@ -4,6 +4,7 @@ import {Marker, Polygon} from 'react-native-maps';
 import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Image} from 'react-native'
 import {getEvaluation} from '../../API/mvp-district-API'
 import icons from '../../assets/icons/iconManager';
+import text from '../../assets/text/text-fr.json'
 
 type results = {
     latAdress: number;
@@ -78,21 +79,20 @@ export const MapGuesserResults: React.FC<Props> = ({
                         latitudeDelta: ((cursor.latitude-results.latAdress)**2)**0.5+0.005,
                         longitudeDelta: ((cursor.longitude-results.lonAdress)**2)**0.5+0.005,
                         }}> 
-                        {/* guessed */}
                         <Marker
                         coordinate={{ latitude : cursor.latitude , longitude : cursor.longitude }}
-                        title={'guessed'}
-                        description={'descr'}>
+                        // TODO: add guessed adress
+                        // </MapView>description={'descr'}
+                        title={text.geoguesser.results.markers.guessed}>
                             <Image
                                 style={styles.truckPointeur}
                                 source={icons["firetruck"]}
                             />
                         </Marker>
-                        {/* true */}
                         <Marker
                         coordinate={{ latitude : results.latAdress , longitude : results.lonAdress }}
-                        title={'true'}
-                        description={'descr'}>
+                        title={text.geoguesser.results.markers.true}
+                        description={`${adress.num} ${adress.rue}\n${adress.com}`}>
                             <Image
                                 style={styles.fireGifMarker}
                                 source={icons["fireGif"]}

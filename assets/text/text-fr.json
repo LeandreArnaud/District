@@ -28,6 +28,12 @@
                 "adress": "ADRESSE: ",
                 "com": "COMMUNE: "
             }
+        },
+        "results": {
+            "markers": {
+                "guessed": "Votre prédiction",
+                "true": "Véritable adresse"
+            }
         }
     }
 }
