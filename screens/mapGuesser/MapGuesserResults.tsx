@@ -35,6 +35,18 @@ type Props = {
     cursor: cursor;
     closeModalFunction: () => void;
   };
+const getGifName = (score: number): string => {
+    if (score < 0.5) {
+        return "newbi";
+    } else if (score < 0.8) {
+        return "hero";
+    } else if (score < 0.85) {
+        return "yesSir";
+    } else if (score >= 0.85) {
+        return "amazing";
+    }
+    return "";
+}
 
 const ResultLine = ({checked, title}) => (
     <View style={styles.postItRow}>
@@ -145,7 +157,8 @@ export const MapGuesserResults: React.FC<Props> = ({
                             <View style={styles.gifContainer}>
                                 <Image
                                     style={styles.gif}
-                                    source={gifs["amazing"]}
+                                    // @ts-ignore
+                                    source={results?.score && gifs[getGifName(results.score)]}
                                 />
                             </View>
                         </View>
