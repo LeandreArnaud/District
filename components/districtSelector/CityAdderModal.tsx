@@ -32,7 +32,7 @@ export const CityAdderModal: React.FC<CityAdderModalProps> = ({ cities, onClose,
                 <Text>Ajouter la ville de votre choix</Text>
                 <ScrollView style={styles.scrollContainer}>
                     <View style={styles.citiesContainer}>
-                        {displayedCities.map(city => 
+                        {displayedCities?.map(city => 
                             <CityCell 
                                 key={`${city.COM_NORM}-${city.CP}`} 
                                 city={city} 
