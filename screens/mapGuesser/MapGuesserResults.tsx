@@ -34,7 +34,8 @@ type Props = {
     adress: adress;
     cursor: cursor;
     closeModalFunction: () => void;
-  };
+};
+
 const getGifName = (score: number): string => {
     if (score < 0.5) {
         return "newbi";
@@ -48,7 +49,7 @@ const getGifName = (score: number): string => {
     return "";
 }
 
-const ResultLine = ({checked, title}) => (
+const ResultLine = ({checked, title}: {checked: boolean, title: string}) => (
     <View style={styles.postItRow}>
         <Image
             style={styles.checkedIcon}
@@ -58,7 +59,7 @@ const ResultLine = ({checked, title}) => (
     </View>
 );
 
-const ResultPostIt = ({score}) => (
+const ResultPostIt = ({score}: {score: number}) => (
     <View style={styles.postItContainer}>
         <View style={styles.scoreText}>
             <Text style={styles.scoreTextText}>{`${score}%`}</Text>
