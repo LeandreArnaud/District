@@ -33,7 +33,10 @@
             "markers": {
                 "guessed": "Votre prédiction",
                 "true": "Véritable adresse"
-            }
+            },
+            "close": "Proche",
+            "street": "Rue",
+            "atDoor": "Numéro"
         }
     }
 }

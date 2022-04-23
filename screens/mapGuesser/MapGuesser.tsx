@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
         right: 20,  
         backgroundColor: "#DAAC08",
         borderRadius: 40,
-        padding: 10
+        padding: 10,
     },
     sendButtonIcon: {
         width: 25,

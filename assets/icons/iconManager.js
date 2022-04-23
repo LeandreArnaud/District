@@ -11,4 +11,6 @@ export default {
     close: require('./close.png'),
     refresh: require('./refresh.png'),
     fireGif: require('./fireGif.webp'),
+    ckbChecked: require('./checked-checkbox.png'),
+    ckbUnchecked: require('./unchecked-checkbox.png'),
  }
