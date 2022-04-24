@@ -6,6 +6,7 @@ import {getEvaluation} from '../../API/mvp-district-API'
 import icons from '../../assets/icons/iconManager';
 import gifs from '../../assets/gifs/gifManager';
 import text from '../../assets/text/text-fr.json'
+import Ticket from './Ticket';
 
 type results = {
     latAdress: number;
@@ -34,6 +35,7 @@ type Props = {
     adress: adress;
     cursor: cursor;
     closeModalFunction: () => void;
+    navigation: any;
 };
 
 const getGifName = (score: number): string => {
@@ -75,9 +77,12 @@ export const MapGuesserResults: React.FC<Props> = ({
     adress,
     cursor,
     closeModalFunction,
+    navigation,
 }) => {
     const [results, setResults]: [results, Dispatch<SetStateAction<results>>] = React.useState();
     const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(true);
+    const [ticketVisible, setTicketVisible] = useState<boolean>(false);
+
 
     const evaluate = () => {
         getEvaluation({
@@ -100,6 +105,9 @@ export const MapGuesserResults: React.FC<Props> = ({
 
     return(
         <View style={styles.modalContainer}>
+            {ticketVisible && (
+                <Ticket adressToGuess={adress} hideTicket={() => setTicketVisible(false)}/>
+            )}
             <View style={styles.mapContainer}>
                 {results?.score!=null &&
                     <MapView 
@@ -138,6 +146,22 @@ export const MapGuesserResults: React.FC<Props> = ({
                         </Polygon>
                     </MapView>
                 }
+                <View 
+                    style={styles.topButtonContainer}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} >
+                        <Image
+                            style={styles.returnChevronIcon}
+                            source={icons["chevron"]}
+                        />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={() => setTicketVisible(true)} >
+                        <Image
+                            style={styles.topButtonIcon}
+                            source={icons["document"]}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
             
             {isResultModalOpen ? (
@@ -327,7 +351,25 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         height: '100%',
         width: '100%',
-    }
+    },
+    topButtonContainer:{
+        width: '100%',
+        position: 'absolute',
+        top: 40,
+        paddingHorizontal: 20,
+        flex: 0,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    topButtonIcon: {
+        height: 25,
+        width: 25,
+    },
+    returnChevronIcon: {
+        height: 25,
+        width: 25,
+        transform: [{rotate: '180deg'}]
+    },
 });
 
 

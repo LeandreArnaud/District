@@ -6,6 +6,7 @@ import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
 import icons from '../../assets/icons/iconManager';
 import text from '../../assets/text/text-fr.json'
+import Ticket from './Ticket';
 
 type adress = {
     id: string;
@@ -83,36 +84,12 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                 <MapGuesserResults
                     adress={adressToGuess}
                     cursor={cursor}
-                    closeModalFunction={() => toggleResultVisibility()}/>
+                    closeModalFunction={() => toggleResultVisibility()}
+                    navigation={navigation}/>
             )}
             
             {adressToGuess?.id && ticketVisible && (
-
-                <View style={styles.modalContainer} >
-                    <TouchableOpacity style={styles.blurredBackground} onPress={() => setTicketVisible(false)} />
-                    <View style={styles.ticketContainer} >
-                        <View style={styles.ticket} >
-                            <View
-                            style={styles.ticketHole}>
-                                {[...Array(20)].map((e, i) => <View style={styles.circle} key={i}></View>)}
-                            </View>
-
-                            <View
-                            style={styles.ticketTextZone}>
-                                <Text style={styles.ticketText}>
-                                    {`${text.geoguesser.guesser.ticket.title}\n\n\n`}
-                                    {`${text.geoguesser.guesser.ticket.adress}${adressToGuess.num} ${adressToGuess.rue}\n`}
-                                    {`${text.geoguesser.guesser.ticket.com}${adressToGuess.cp} ${adressToGuess.com}\n`}
-                                </Text>
-                            </View>
-                            
-                            <View
-                            style={styles.ticketHole}>
-                                {[...Array(20)].map((e, i) => <View style={styles.circle} key={i}></View>)}
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                <Ticket adressToGuess={adressToGuess} hideTicket={() => setTicketVisible(false)}/>
             )}
             
 
@@ -219,12 +196,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     topButtonIcon: {
-        height: 30,
-        width: 30,
+        height: 25,
+        width: 25,
     },
     returnChevronIcon: {
-        height: 30,
-        width: 30,
+        height: 25,
+        width: 25,
         transform: [{rotate: '180deg'}]
     },
     modalContainer: {
@@ -243,43 +220,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
         top: 0,
-    },
-    centeredView:{
-    },
-    ticketContainer:{
-        width: Dimensions.get('window').width*0.9,
-        height: Dimensions.get('window').height*0.5,
-    },
-    ticket:{
-        flex:1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#FEF9E7',
-        overflow: 'hidden',
-        borderRadius: 20,
-    },
-    ticketTextZone: {
-        width: Dimensions.get('window').width*0.7,
-    },
-    ticketText: {
-        textAlign:'center',
-        color: 'black',
-        fontFamily: 'monospace'
-    },
-    ticketHole:{
-        backgroundColor:'#FFFFFF',
-        paddingHorizontal: 10,
-        borderStyle: 'dashed',
-        borderWidth: 1,
-        borderRadius: 1
-    },
-    circle:{
-        width: 10,
-        height: 10,
-        borderRadius: 10 / 2,
-        backgroundColor: "black",
-        marginVertical: 10
     },
 });
 
