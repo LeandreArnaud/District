@@ -29,7 +29,10 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
     const [toolToOpen, setToolToOpen] = useState<string>();
     const [savedDistricts, setSavedDistricts] = useState<districts>();
 
-    const openTool = (district: district) => navigation.navigate(toolToOpen, {district: district});
+    const openTool = (district: district) => {
+        setDistrictSelectionModalEnable(false)
+        navigation.navigate(toolToOpen, {district: district});
+    };
 
     useEffect(()=>{
         navigation.addListener('focus', () => {
