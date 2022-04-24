@@ -32,7 +32,7 @@
         "results": {
             "markers": {
                 "guessed": "Votre prédiction",
-                "true": "Véritable adresse"
+                "true": "Adresse à deviner"
             },
             "close": "Proche",
             "street": "Rue",
