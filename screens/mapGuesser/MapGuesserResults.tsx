@@ -183,7 +183,7 @@ export const MapGuesserResults: React.FC<Props> = ({
                                 <Image
                                     style={styles.gif}
                                     // @ts-ignore
-                                    source={results?.score && gifs[getGifName(results.score)]}
+                                    source={gifs[getGifName(results?.score)]}
                                 />
                             </View>
                         </View>
