@@ -25,7 +25,7 @@ type districts = district[]
 type HomePageProps = { navigation: any };
 
 export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
-    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState(false);
+    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState<boolean>(false);
     const [toolToOpen, setToolToOpen] = useState<string>();
     const [savedDistricts, setSavedDistricts] = useState<districts>();
 
