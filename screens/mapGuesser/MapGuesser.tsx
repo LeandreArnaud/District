@@ -1,11 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MapView from 'react-native-maps';
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, Image} from 'react-native'
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native'
 import {getRandomAdress} from '../../API/mvp-district-API'
 import mapStyle from '../../GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
 import icons from '../../assets/icons/iconManager';
-import text from '../../assets/text/text-fr.json'
 import Ticket from './Ticket';
 
 type adress = {
@@ -48,12 +47,10 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
         latitudeDelta: 0.1,
         longitudeDelta: 0.1,
     };
-    const [adressToGuess, setAdressToGuess]: [adress, Dispatch<SetStateAction<adress>>] = React.useState();
-    const [cursor, setCursor]: [cursor, Dispatch<SetStateAction<cursor>>] = React.useState(initialCursor);
-    // @ts-ignore
-    const [ticketVisible, setTicketVisible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(true);
-    // @ts-ignore
-    const [resultVisible, setResult_visible]: [boolean, Dispatch<SetStateAction<boolean>>] = React.useState(false);
+    const [adressToGuess, setAdressToGuess] = useState<adress>();
+    const [cursor, setCursor] = useState<cursor>(initialCursor);
+    const [ticketVisible, setTicketVisible] = useState<boolean>(true);
+    const [resultVisible, setResult_visible] = useState<boolean>(false);
 
 
     const toggleResultVisibility = () =>{
@@ -145,13 +142,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    textContainer: {
-        backgroundColor: 'green',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-    },
     mapContainer: {
         width: '100%',
         height: '100%',
@@ -203,23 +193,6 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         transform: [{rotate: '180deg'}]
-    },
-    modalContainer: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        top: 0,
-        zIndex: 1,
-        flex: 0,
-        alignItems:'center',
-        justifyContent: 'center',
-    },
-    blurredBackground: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-        top: 0,
     },
 });
 
