@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import text from '../assets/text/text-fr.json'
-import DistrictSelectorModal from '../components/homepage/DistrictSelectorModal';
-import HomepageHeader from '../components/homepage/HomepageHeader';
-import ToolCell from '../components/homepage/ToolCell';
-import { getDistricts } from '../utile/LocalStorage';
+import text from '../../assets/text/text-fr.json'
+import DistrictSelectorModal from '../../components/homepage/DistrictSelectorModal';
+import HomepageHeader from '../../components/homepage/HomepageHeader';
+import ToolCell from '../../components/homepage/ToolCell';
+import { getDistricts } from '../../utile/LocalStorage';
 
 interface city {
     COM: string;

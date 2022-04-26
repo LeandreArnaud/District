@@ -1,7 +1,7 @@
 import MapGuesser from '../screens/mapGuesser/MapGuesser';
-import Homepage from '../screens/Homepage';
-import DistrictCreator from '../screens/mapGuesser/DistrictCreator';
-import Settings from '../screens/Settings';
+import Homepage from '../screens/homepage/Homepage';
+import DistrictCreator from '../screens/homepage/DistrictCreator';
+import Settings from '../screens/homepage/Settings';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();

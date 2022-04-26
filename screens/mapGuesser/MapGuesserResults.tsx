@@ -6,7 +6,7 @@ import {getEvaluation} from '../../API/mvp-district-API'
 import icons from '../../assets/icons/iconManager';
 import gifs from '../../assets/gifs/gifManager';
 import text from '../../assets/text/text-fr.json'
-import Ticket from './Ticket';
+import Ticket from '../../components/mapGuesser/Ticket';
 
 type results = {
     latAdress: number;
