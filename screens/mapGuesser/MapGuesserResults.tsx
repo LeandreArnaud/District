@@ -79,7 +79,7 @@ export const MapGuesserResults: React.FC<Props> = ({
     closeModalFunction,
     navigation,
 }) => {
-    const [results, setResults]: [results, Dispatch<SetStateAction<results>>] = React.useState();
+    const [results, setResults] = useState<results>();
     const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(true);
     const [ticketVisible, setTicketVisible] = useState<boolean>(false);
 
