@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, Image, ColorPropType} from 'react-native'
-import text from '../../assets/text/text-fr.json'
-import DistrictSelectorModal from '../../components/homepage/DistrictSelectorModal';
-import HomepageHeader from '../../components/homepage/HomepageHeader';
-import ToolCell from '../../components/homepage/ToolCell';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import { resetDistricts, getDistricts } from '../../utile/LocalStorage';
 
 interface city {
