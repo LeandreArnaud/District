@@ -21,9 +21,9 @@ interface district {
 
 type districts = district[]
 
-type DistrictSelectorModalProps = { hideModal: () => void, districts?: districts|undefined, opentool: (district: district) => void, navigation: any };
+type DistrictSelectorModalProps = { districts?: districts|undefined, opentool: (district: district) => void, navigation: any };
 
-export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hideModal, districts, opentool, navigation}) => {
+export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({districts, opentool, navigation}) => {
 
     const maxCitiesDisplayed = 4;
 
@@ -34,74 +34,49 @@ export const DistrictSelectorModal: React.FC<DistrictSelectorModalProps> = ({hid
         </View>
     );
     return(
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.backgroundBlur} onPress={hideModal}/>
-            <View style={styles.modaleContainter}>
-
-                <View style={styles.modaleTitleContainter}>
-                    <Image
-                        style={styles.titleIcon}
-                        // @ts-ignore
-                        source={icons[text.DistrictSelectorModal.icon]}
-                    />
-                    <View style={styles.modaleTitleTextContainter}>
-                        <Text style={styles.h1}>{text.DistrictSelectorModal.title}</Text>
-                        <Text style={styles.h2}>{text.DistrictSelectorModal.subtitle}</Text>
-                    </View>
+        <View style={styles.modaleContainter}>
+            <View style={styles.modaleTitleContainter}>
+                <Image
+                    style={styles.titleIcon}
+                    // @ts-ignore
+                    source={icons[text.DistrictSelectorModal.icon]}
+                />
+                <View style={styles.modaleTitleTextContainter}>
+                    <Text style={styles.h1}>{text.DistrictSelectorModal.title}</Text>
+                    <Text style={styles.h2}>{text.DistrictSelectorModal.subtitle}</Text>
                 </View>
+            </View>
 
-                <ScrollView style={styles.scrollView}>
-                    {districts && districts.map(dis => 
-                        <TouchableOpacity style={styles.districtCellContainer} onPress={() => opentool(dis)} key={`${dis.shortname}-${dis.centerLat}`}>
-                            <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
-                            <View style={styles.districtCitiesContainer}>
-                                {dis.cities.length <= maxCitiesDisplayed+1
-                                    ? dis.cities.map(cit => cityLine(cit))
-                                    : dis.cities
-                                        .slice(0, maxCitiesDisplayed)
-                                        .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: "", LAT: 0, LON: 0}])
-                                        .map(cit => cityLine(cit))
-                                }
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                </ScrollView>
-
-                <View style={styles.addButtonContainer}>
-                    <TouchableOpacity style={styles.addButtonTouchable} onPress={() => navigation.navigate("DistrictCreator")}>
-                        <Text style={styles.addButtonText}>{text.DistrictSelectorModal.add}</Text>
+            <ScrollView style={styles.scrollView}>
+                {districts && districts.map(dis => 
+                    <TouchableOpacity style={styles.districtCellContainer} onPress={() => opentool(dis)} key={`${dis.shortname}-${dis.centerLat}`}>
+                        <Text style={styles.districtCellTitle}>{dis.shortname.toUpperCase().slice(0,3)}</Text>
+                        <View style={styles.districtCitiesContainer}>
+                            {dis.cities.length <= maxCitiesDisplayed+1
+                                ? dis.cities.map(cit => cityLine(cit))
+                                : dis.cities
+                                    .slice(0, maxCitiesDisplayed)
+                                    .concat([{COM: `${text.DistrictSelectorModal.cityOverflow.and} ${dis.cities.length-maxCitiesDisplayed} ${text.DistrictSelectorModal.cityOverflow.more}`, CP: "", COM_NORM: "", LAT: 0, LON: 0}])
+                                    .map(cit => cityLine(cit))
+                            }
+                        </View>
                     </TouchableOpacity>
-                </View>
+                )}
+            </ScrollView>
+
+            <View style={styles.addButtonContainer}>
+                <TouchableOpacity style={styles.addButtonTouchable} onPress={() => navigation.navigate("DistrictCreator")}>
+                    <Text style={styles.addButtonText}>{text.DistrictSelectorModal.add}</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        position: "absolute",
-        zIndex: 6,
-        width: "100%",
-        height: "110%",
-    },
-    backgroundBlur: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#000000",
-        opacity: 0.4,
-        position: "absolute",
-        top: 0,
-    },
     modaleContainter: {
-        maxHeight: height,
         backgroundColor: "#FFFFFF",
-        position: "absolute",
-        bottom: 0,
         width: "100%",
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        paddingTop: 20,
-        paddingBottom: 70,
     },
     scrollView: {
         width: '100%',

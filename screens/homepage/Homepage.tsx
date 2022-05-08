@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import text from '../../assets/text/text-fr.json'
+import BottomModal from '../../components/general/BottomModal';
 import DistrictSelectorModal from '../../components/homepage/DistrictSelectorModal';
 import HomepageHeader from '../../components/homepage/HomepageHeader';
 import ToolCell from '../../components/homepage/ToolCell';
@@ -55,12 +56,14 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
             )}
             </View>
 
-            {districtSelectionModalEnable && <DistrictSelectorModal 
-                hideModal={() => setDistrictSelectionModalEnable(false)}
-                districts={savedDistricts}
-                opentool={openTool}
-                navigation={navigation}
-            />}
+            {districtSelectionModalEnable && <BottomModal 
+                hideModal={() => setDistrictSelectionModalEnable(false)}>
+                <DistrictSelectorModal 
+                    districts={savedDistricts}
+                    opentool={openTool}
+                    navigation={navigation}/>
+            </BottomModal>}
+
         </View>
     );
 };

@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         zIndex: 6,
         width: width,
-        height: height,
+        // weird:
+        height: height*1.1, 
     },
     backgroundBlur: {
         width: "100%",
@@ -75,11 +76,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         position: "absolute",
         width: "100%",
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         marginTop: 20,
-        paddingBottom: 50,
-        paddingHorizontal: 20,
+        paddingBottom: 70,
     },
     chevronContainer: {
         width: '100%',
