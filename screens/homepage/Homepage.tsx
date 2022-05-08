@@ -26,12 +26,12 @@ type districts = district[]
 type HomePageProps = { navigation: any };
 
 export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
-    const [districtSelectionModalEnable, setDistrictSelectionModalEnable] = useState<boolean>(false);
+    const [districtSelectionModalEnabled, setDistrictSelectionModalEnabled] = useState<boolean>(false);
     const [toolToOpen, setToolToOpen] = useState<string>();
     const [savedDistricts, setSavedDistricts] = useState<districts>();
 
     const openTool = (district: district) => {
-        setDistrictSelectionModalEnable(false)
+        setDistrictSelectionModalEnabled(false)
         navigation.navigate(toolToOpen, {district: district});
     };
 
@@ -51,13 +51,13 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
             {text.homepage.tools.map(tool => 
                 <ToolCell tool={tool} key={tool.title} onPress={() => {
                     setToolToOpen(tool.pushingPage)
-                    setDistrictSelectionModalEnable(true)
+                    setDistrictSelectionModalEnabled(true)
                 }}/>
             )}
             </View>
 
-            {districtSelectionModalEnable && <BottomModal 
-                hideModal={() => setDistrictSelectionModalEnable(false)}>
+            {districtSelectionModalEnabled && <BottomModal 
+                hideModal={() => setDistrictSelectionModalEnabled(false)}>
                 <DistrictSelectorModal 
                     districts={savedDistricts}
                     opentool={openTool}
