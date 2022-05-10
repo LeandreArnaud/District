@@ -16,8 +16,9 @@ interface district {
     cities: city[];
 };
 
+type SettingsProps = { navigation: any };
 
-export const Settings: React.FC = () => {
+export const Settings: React.FC<SettingsProps> = ({navigation}) => {
     const [districts, setDistricts] = useState<Array<district>>();
 
     useEffect(() => {
@@ -36,6 +37,9 @@ export const Settings: React.FC = () => {
                     ? <Text style={styles.enable}> effacer les districts </Text>
                     : <Text style={styles.disable}> Aucun district </Text>
                 }
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('AboutPage')} style={styles.cell}>
+                <Text style={styles.enable}>Nous contacter et CGU</Text>
             </TouchableOpacity>
         </View>
     );
@@ -57,7 +61,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
         borderRadius: 8,
-        backgroundColor: "#D0D0D0"
+        backgroundColor: "#D0D0D0",
+        marginBottom: 10,
     },
     enable: {
         color: "#000000"
