@@ -1,18 +1,20 @@
 import React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import {StyleSheet, View, Text, Linking} from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import text from '../../assets/text/text-fr.json'
 
 export const AboutPage: React.FC = () => {
     return(
         <View style={styles.mainContainer}>
-            <Text style={styles.h1}>District</Text>
-            <Text style={styles.p}>DISTRICT est une application au service des sapeurs pompiers. Elle a pour objectif d'aider l'homme de terrain dans ses missions et son entrainement à travers d'outils évolutifs.</Text>
-            <Text style={styles.a}>Nous contacter</Text>
-            <Text style={styles.a}>Signaler un bug</Text>
+            <Text style={styles.h1}>{text.CGU.about.title1}</Text>
+            <Text style={styles.p}>{text.CGU.about.p1}</Text>
+            <Text onPress={() => Linking.openURL(text.CGU.about.a1link)} style={styles.a}>{text.CGU.about.a1}</Text>
+            <Text onPress={() => Linking.openURL(text.CGU.about.a2link)} style={styles.a}>{text.CGU.about.a2}</Text>
             <View style={styles.sep}/>
 
-            <Text style={styles.h2}>Conditions générales d’utilisation (CGU)</Text>
-            <Text style={styles.h3}>Consistence</Text>
-            <Text style={styles.p}>Les données présentes dans l'application DISTRICT et leur présentation peuvent comporter des erreurs. Les services de secours ne doivent en aucun cas se fier uniquement aux information de l'application pour leurs activités</Text>
+            <Text style={styles.h2}>{text.CGU.cgu.title}</Text>
+            <Text style={styles.h3}>{text.CGU.cgu.part1title}</Text>
+            <Text style={styles.p}>{text.CGU.cgu.part1text}</Text>
         </View>
     );
 };

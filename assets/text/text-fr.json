@@ -45,5 +45,20 @@
             "noDistricts": "Aucun district"
         },
         "cgu": "Nous contacter et CGU"
+    },
+    "CGU": {
+        "about": {
+            "title1": "District",
+            "p1": "DISTRICT est une application au service des sapeurs pompiers. Elle a pour objectif d'aider l'homme de terrain dans ses missions et son entrainement à travers d'outils évolutifs.",
+            "a1": "Nous contacter",
+            "a1link": "mailto:pro.leandre.arnaud@gmail.com",
+            "a2": "Signaler un bug",
+            "a2link": "https://leandrearnaud.github.io"
+        },
+        "cgu": {
+            "title": "Conditions générales d’utilisation (CGU)",
+            "part1title": "Consistence",
+            "part1text": "Les données présentes dans l'application DISTRICT et leur présentation peuvent comporter des erreurs. Les services de secours ne doivent en aucun cas se fier uniquement aux information de l'application pour leurs activités"
+        }
     }
 }
