@@ -38,5 +38,12 @@
             "street": "Rue",
             "atDoor": "Numéro"
         }
+    },
+    "settings": {
+        "rmDistricts": {
+            "rm": "effacer les districts",
+            "noDistricts": "Aucun district"
+        },
+        "cgu": "Nous contacter et CGU"
     }
 }

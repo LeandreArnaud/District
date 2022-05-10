@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import { resetDistricts, getDistricts } from '../../utile/LocalStorage';
+import text from '../../assets/text/text-fr.json'
 
 interface city {
     COM: string;
@@ -34,12 +35,12 @@ export const Settings: React.FC<SettingsProps> = ({navigation}) => {
         <View style={styles.mainContainer}>
             <TouchableOpacity onPress={handleResetDistrict} disabled={!districts} style={styles.cell}>
                 {districts 
-                    ? <Text style={styles.enable}> effacer les districts </Text>
-                    : <Text style={styles.disable}> Aucun district </Text>
+                    ? <Text style={styles.enable}>{text.settings.rmDistricts.rm}</Text>
+                    : <Text style={styles.disable}>{text.settings.rmDistricts.noDistricts}</Text>
                 }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('AboutPage')} style={styles.cell}>
-                <Text style={styles.enable}>Nous contacter et CGU</Text>
+                <Text style={styles.enable}>{text.settings.cgu}</Text>
             </TouchableOpacity>
         </View>
     );
