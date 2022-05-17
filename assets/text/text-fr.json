@@ -60,5 +60,11 @@
             "part1title": "Consistence",
             "part1text": "Les données présentes dans l'application DISTRICT et leur présentation peuvent comporter des erreurs. Les services de secours ne doivent en aucun cas se fier uniquement aux information de l'application pour leurs activités"
         }
+    },
+    "updateModal": {
+        "title": "Une mise à jour est disponible !",
+        "body": "Nous conseillons vivement de mettre l'application à jour pour des raisons de sécurité 👮 mais également pour ne pas rater nos dernières fonctionnalités 🚀 ou les corrections de bugs éventuels 🪳 ",
+        "yes": "Mettre à jour",
+        "no": "Plus tard"
     }
 }

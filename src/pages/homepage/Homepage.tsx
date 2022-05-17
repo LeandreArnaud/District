@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import text from '../../../assets/text/text-fr.json'
 import BottomModal from '../../components/general/BottomModal';
+import CenteredModal from '../../components/general/CenteredModal';
 import DistrictSelectorModal from '../../components/homepage/DistrictSelectorModal';
 import HomepageHeader from '../../components/homepage/HomepageHeader';
 import ToolCell from '../../components/homepage/ToolCell';
+import UpdateModalContent from '../../components/homepage/UpdateModalContent';
 import { getDistricts } from '../../services/LocalStorage';
 
 interface city {
@@ -29,6 +31,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
     const [districtSelectionModalEnabled, setDistrictSelectionModalEnabled] = useState<boolean>(false);
     const [toolToOpen, setToolToOpen] = useState<string>();
     const [savedDistricts, setSavedDistricts] = useState<districts>();
+    const [isUpdateModalOpened, setIsUpdateModalOpened] = useState<boolean>(false);
 
     const openTool = (district: district) => {
         setDistrictSelectionModalEnabled(false)
@@ -45,6 +48,12 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
 
     return(
         <View style={styles.mainContainer}>
+            {/* TODO: open it if an update is available */}
+            {isUpdateModalOpened &&
+                <CenteredModal hideModal={() => setIsUpdateModalOpened(false)}>
+                    <UpdateModalContent onCloseModal={() => setIsUpdateModalOpened(false)}/>
+                </CenteredModal>}
+
             <HomepageHeader onSettings={() => navigation.navigate("Settings")} />
 
             <View style={styles.toolsContainer}>
