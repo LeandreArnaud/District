@@ -10,9 +10,7 @@ export const CenteredModal: React.FC<CenteredModalProps> = ({children, hideModal
             <TouchableWithoutFeedback onPress={hideModal}>
                 <View style={styles.backgroundBlur} />
             </TouchableWithoutFeedback>
-            <View style={styles.modalContentContainer}>
                 {children}
-            </View>
         </View>
     );
 };
@@ -35,9 +33,6 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 0,
     },
-    modalContentContainer: {
-        backgroundColor: "#FFFFFF"
-    }
 });
 
 
