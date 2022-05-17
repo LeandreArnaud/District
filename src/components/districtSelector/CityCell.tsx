@@ -16,7 +16,7 @@ export const CityCell: React.FC<CityCellProps> = ({ city, onRemove, add }) => {
         <View style={styles.cityCell} key={city.COM}>
             <View style={styles.cityCellText}>
                 <Text>{city.CP}   -   </Text>
-                <Text>{city.COM_NORM}</Text>
+                <Text>{city.COM}</Text>
             </View>
             <TouchableOpacity onPress={onRemove}>
                 {add ? (
