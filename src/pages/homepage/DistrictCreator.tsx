@@ -1,13 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, ColorPropType, Image} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
-import { getComs } from '../../API/mvp-district-API';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CityCell } from '../../components/districtSelector/CityCell';
 import { CityAdderModal } from '../../components/districtSelector/CityAdderModal';
-import { addDistrict } from '../../utile/LocalStorage';
-import icons from '../../assets/icons/iconManager';
+import icons from '../../../assets/icons/iconManager';
 import { mean } from 'lodash';
+import { getComs } from '../../services/mvp-district-API';
+import { addDistrict } from '../../services/LocalStorage';
 interface city {
     COM: string;
     CP: string;

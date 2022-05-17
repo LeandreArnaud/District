@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
-import { resetDistricts, getDistricts } from '../../utile/LocalStorage';
-import text from '../../assets/text/text-fr.json'
+import text from '../../../assets/text/text-fr.json'
+import { getDistricts, resetDistricts } from '../../services/LocalStorage';
 
 interface city {
     COM: string;

@@ -1,9 +1,9 @@
-import MapGuesser from '../screens/mapGuesser/MapGuesser';
-import Homepage from '../screens/homepage/Homepage';
-import DistrictCreator from '../screens/homepage/DistrictCreator';
-import Settings from '../screens/homepage/Settings';
+import MapGuesser from '../pages/mapGuesser/MapGuesser';
+import Homepage from '../pages/homepage/Homepage';
+import DistrictCreator from '../pages/homepage/DistrictCreator';
+import Settings from '../pages/homepage/Settings';
 import { createStackNavigator } from '@react-navigation/stack';
-import AboutPage from '../screens/homepage/AboutPage';
+import AboutPage from '../pages/homepage/AboutPage';
 
 const Stack = createStackNavigator();
 

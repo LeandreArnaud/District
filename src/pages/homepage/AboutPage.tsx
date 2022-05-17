@@ -1,7 +1,6 @@
 import React from 'react'
 import {StyleSheet, View, Text, Linking} from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import text from '../../assets/text/text-fr.json'
+import text from '../../../assets/text/text-fr.json'
 
 export const AboutPage: React.FC = () => {
     return(

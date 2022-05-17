@@ -1,6 +1,6 @@
 import React from 'react'
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native'
-import icons from '../../assets/icons/iconManager';
+import icons from '../../../assets/icons/iconManager';
 
 type toolType = {
     title: string,

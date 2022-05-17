@@ -1,7 +1,6 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image, TouchableOpacity, Dimensions} from 'react-native'
-import text from '../../assets/text/text-fr.json'
-import icons from '../../assets/icons/iconManager';
+import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from 'react-native'
+import text from '../../../assets/text/text-fr.json'
 
 type adress = {
     id: string;

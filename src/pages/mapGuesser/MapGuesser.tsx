@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import MapView from 'react-native-maps';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native'
-import {getRandomAdress} from '../../API/mvp-district-API'
-import mapStyle from '../../assets/GMStyles/BlindMapStyle.js'
+import mapStyle from '../../../assets/GMStyles/BlindMapStyle.js'
 import MapGuesserResults from './MapGuesserResults';
-import icons from '../../assets/icons/iconManager';
+import icons from '../../../assets/icons/iconManager';
 import Ticket from '../../components/mapGuesser/Ticket';
+import { getRandomAdress } from '../../services/mvp-district-API';
 
 type adress = {
     id: string;

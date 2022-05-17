@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native'
+import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native'
 
 type CenteredModalProps = { hideModal: () => void, children: React.ReactNode};
 

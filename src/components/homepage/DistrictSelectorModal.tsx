@@ -1,8 +1,8 @@
 import React from 'react'
 import {StyleSheet, View, Text, Image, TouchableOpacity, Dimensions} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
-import icons from '../../assets/icons/iconManager'
-import text from '../../assets/text/text-fr.json'
+import icons from '../../../assets/icons/iconManager'
+import text from '../../../assets/text/text-fr.json'
 
 const { height } = Dimensions.get('window');
 interface city {

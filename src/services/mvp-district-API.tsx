@@ -1,4 +1,4 @@
-import config from "../config.json";
+import config from "../../config.json";
 
 const URL = config.Backend_URL;
 

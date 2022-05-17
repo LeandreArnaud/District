@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from 'react'
 import {StyleSheet, View, Image, Dimensions, Animated, TouchableWithoutFeedback} from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import icons from '../../assets/icons/iconManager';
+import icons from '../../../assets/icons/iconManager';
 
 const { height, width } = Dimensions.get('window');
 

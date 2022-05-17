@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity, Image, TextInput, ScrollView} from 'react-native'
-import icons from '../../assets/icons/iconManager';
+import {StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native'
 import CityCell from './CityCell';
 
 interface city {

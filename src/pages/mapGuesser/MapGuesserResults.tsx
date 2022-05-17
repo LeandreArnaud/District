@@ -1,12 +1,12 @@
-import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MapView from 'react-native-maps';
 import {Marker, Polygon} from 'react-native-maps';
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity, Modal, ActivityIndicator, Image} from 'react-native'
-import {getEvaluation} from '../../API/mvp-district-API'
-import icons from '../../assets/icons/iconManager';
-import gifs from '../../assets/gifs/gifManager';
-import text from '../../assets/text/text-fr.json'
+import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native'
+import icons from '../../../assets/icons/iconManager';
+import gifs from '../../../assets/gifs/gifManager';
+import text from '../../../assets/text/text-fr.json'
 import Ticket from '../../components/mapGuesser/Ticket';
+import { getEvaluation } from '../../services/mvp-district-API';
 
 type results = {
     latAdress: number;

@@ -1,7 +1,7 @@
 import React from 'react'
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native'
-import text from '../../assets/text/text-fr.json'
-import icons from '../../assets/icons/iconManager';
+import text from '../../../assets/text/text-fr.json'
+import icons from '../../../assets/icons/iconManager';
 
 type HomepageHeaderProps = { onSettings: () => void };
 
