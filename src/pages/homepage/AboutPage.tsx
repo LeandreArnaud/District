@@ -1,6 +1,8 @@
 import React from 'react'
 import {StyleSheet, View, Text, Linking} from 'react-native'
 import text from '../../../assets/text/text-fr.json'
+import cguText from '../../../assets/text/cgu.json'
+
 
 export const AboutPage: React.FC = () => {
     return(
@@ -12,8 +14,14 @@ export const AboutPage: React.FC = () => {
             <View style={styles.sep}/>
 
             <Text style={styles.h2}>{text.CGU.cgu.title}</Text>
-            <Text style={styles.h3}>{text.CGU.cgu.part1title}</Text>
-            <Text style={styles.p}>{text.CGU.cgu.part1text}</Text>
+            {Object.keys(cguText).map((key, index) => 
+                <View key={`view-${index}`}>
+                    <Text style={styles.h2} key={`${index}`}>{key}</Text>
+                    {Object.values(cguText)[index].map((para, subindex) => 
+                        <Text style={styles.p} key={`${subindex}-${index}`}>{para}</Text>
+                    )}
+                </View>
+            )}
         </View>
     );
 };
@@ -43,8 +51,7 @@ const styles = StyleSheet.create({
     },
     p: {
         fontSize: 15,
-        width: '100%',
-        marginBottom: 10,
+        lineHeight: 22,
         textAlign: 'justify',
     },
     a: {
