@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
     },
     buttonsContainer: {
-        backgroundColor: 'green',
         height: 50,
         width: '100%',
         flex: 0,
