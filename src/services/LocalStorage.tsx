@@ -47,13 +47,12 @@ export const addDistrict = async (value: district) => {
 }
 
 export const getDistricts = async () => {
-    try {
-      const value = await AsyncStorage.getItem('Districts')
-      if(value !== null) {
-        return JSON.parse(value)
-      }
-    } catch(e) {
-        console.log('error when reading district in local storage');
+  try {
+    const value = await AsyncStorage.getItem('Districts')
+    if(value !== null) {
+      return JSON.parse(value)
     }
+  } catch(e) {
+      console.log('error when reading district in local storage');
   }
   
