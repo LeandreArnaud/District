@@ -55,4 +55,26 @@ export const getDistricts = async () => {
   } catch(e) {
       console.log('error when reading district in local storage');
   }
+}
+
+export const saveAcceptedCGU = async () => {
+  try {
+    await AsyncStorage.setItem('hasAcceptedCGU', JSON.stringify(true))
+  } catch (e) {
+    console.log('error when saving acceptedCGU');
+    }
+}
+
+export const getAcceptedCGU = async () => {
+  try {
+    const value = await AsyncStorage.getItem('hasAcceptedCGU')
+    if(value !== null) {
+      return JSON.parse(value)
+    } else {
+      return false
+    }
+  } catch(e) {
+      console.log('error when getting acceptedCGU');
+  }
+}
   

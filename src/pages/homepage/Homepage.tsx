@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native'
 import text from '../../../assets/text/text-fr.json'
 import BottomModal from '../../components/general/BottomModal';
 import CenteredModal from '../../components/general/CenteredModal';
+import CGUModalContent from '../../components/homepage/CGUModalContent';
 import DistrictSelectorModal from '../../components/homepage/DistrictSelectorModal';
 import HomepageHeader from '../../components/homepage/HomepageHeader';
 import ToolCell from '../../components/homepage/ToolCell';
 import UpdateModalContent from '../../components/homepage/UpdateModalContent';
-import { getDistricts } from '../../services/LocalStorage';
+import { getAcceptedCGU, getDistricts } from '../../services/LocalStorage';
 
 interface city {
     COM: string;
@@ -32,6 +33,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
     const [toolToOpen, setToolToOpen] = useState<string>();
     const [savedDistricts, setSavedDistricts] = useState<districts>();
     const [isUpdateModalOpened, setIsUpdateModalOpened] = useState<boolean>(false);
+    const [isCGUModalOpened, setIsCGUModalOpened] = useState<boolean>(false);
 
     const openTool = (district: district) => {
         setDistrictSelectionModalEnabled(false)
@@ -44,6 +46,7 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
                 setSavedDistricts(res)
             });
         })
+        getAcceptedCGU().then(res => setIsCGUModalOpened(!res))
     }, [])
 
     return(
@@ -52,6 +55,11 @@ export const Homepage: React.FC<HomePageProps> = ({ navigation }) => {
             {isUpdateModalOpened &&
                 <CenteredModal hideModal={() => setIsUpdateModalOpened(false)}>
                     <UpdateModalContent onCloseModal={() => setIsUpdateModalOpened(false)}/>
+                </CenteredModal>}
+
+            {isCGUModalOpened &&
+                <CenteredModal hideModal={() => {}}>
+                    <CGUModalContent onCloseModal={() => setIsCGUModalOpened(false)}/>
                 </CenteredModal>}
 
             <HomepageHeader onSettings={() => navigation.navigate("Settings")} />
