@@ -57,8 +57,7 @@
         },
         "cgu": {
             "title": "Conditions générales d’utilisation (CGU)",
-            "part1title": "Consistence",
-            "part1text": "Les données présentes dans l'application DISTRICT et leur présentation peuvent comporter des erreurs. Les services de secours ne doivent en aucun cas se fier uniquement aux information de l'application pour leurs activités"
+            "acceptedButton": "Accepter"
         }
     },
     "updateModal": {
