@@ -1,28 +1,32 @@
 import React from 'react'
-import {StyleSheet, View, Text, Linking} from 'react-native'
+import {StyleSheet, View, Text, Linking, ScrollView} from 'react-native'
 import text from '../../../assets/text/text-fr.json'
 import cguText from '../../../assets/text/cgu.json'
 
 
 export const AboutPage: React.FC = () => {
     return(
-        <View style={styles.mainContainer}>
-            <Text style={styles.h1}>{text.CGU.about.title1}</Text>
-            <Text style={styles.p}>{text.CGU.about.p1}</Text>
-            <Text onPress={() => Linking.openURL(text.CGU.about.a1link)} style={styles.a}>{text.CGU.about.a1}</Text>
-            <Text onPress={() => Linking.openURL(text.CGU.about.a2link)} style={styles.a}>{text.CGU.about.a2}</Text>
-            <View style={styles.sep}/>
+        <ScrollView>
+            <View style={styles.mainContainer}>
+                
+                    <Text style={styles.h1}>{text.CGU.about.title1}</Text>
+                    <Text style={styles.p}>{text.CGU.about.p1}</Text>
+                    <Text onPress={() => Linking.openURL(text.CGU.about.a1link)} style={styles.a}>{text.CGU.about.a1}</Text>
+                    <Text onPress={() => Linking.openURL(text.CGU.about.a2link)} style={styles.a}>{text.CGU.about.a2}</Text>
+                    <View style={styles.sep}/>
 
-            <Text style={styles.h2}>{text.CGU.cgu.title}</Text>
-            {Object.keys(cguText).map((key, index) => 
-                <View key={`view-${index}`}>
-                    <Text style={styles.h2} key={`${index}`}>{key}</Text>
-                    {Object.values(cguText)[index].map((para, subindex) => 
-                        <Text style={styles.p} key={`${subindex}-${index}`}>{para}</Text>
+                    <Text style={styles.h2}>{text.CGU.cgu.title}</Text>
+                    {Object.keys(cguText).map((key, index) => 
+                        <View key={`view-${index}`}>
+                            <Text style={styles.h3} key={`${index}`}>{key}</Text>
+                            {Object.values(cguText)[index].map((para, subindex) => 
+                                <Text style={styles.p} key={`${subindex}-${index}`}>{para}</Text>
+                            )}
+                        </View>
                     )}
-                </View>
-            )}
-        </View>
+                
+            </View>
+        </ScrollView>
     );
 };
 
@@ -33,6 +37,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingTop: 20,
+        paddingBottom: 80,
         paddingHorizontal: 20,
     },
     h1: {
@@ -45,9 +50,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     h3: {
+        marginTop: 10,
+        color: '#666666',
         fontSize: 20,
         fontWeight: 'bold',
-        width: '100%',
+        textAlign: 'center',
     },
     p: {
         fontSize: 15,
