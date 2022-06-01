@@ -94,9 +94,10 @@ export const MapGuesser: React.FC<MapGuesserProps> = ({route, navigation}) => {
                 <MapView 
                     // @ts-ignore
                     style={styles.map} 
-                    initialRegion={initialCursor}
+                    region={cursor}
                     onRegionChangeComplete={(region) => setCursor(region)}
                     customMapStyle={mapStyle}
+                    showsUserLocation={false}
                 >   
                 </MapView>
                 <View pointerEvents="none" style={styles.staticMarkerContainer}>

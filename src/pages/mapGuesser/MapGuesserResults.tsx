@@ -112,6 +112,7 @@ export const MapGuesserResults: React.FC<Props> = ({
                 {results?.score!=null &&
                     <MapView 
                     style={styles.map} 
+                    showsUserLocation={false}
                     region={{
                         latitude: (cursor.latitude+results.latAdress)/2,
                         longitude: (cursor.longitude+results.lonAdress)/2,
